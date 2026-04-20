@@ -67,33 +67,33 @@ Masalah riset yang layak harus memenuhi 5 kriteria:
 PROBLEM STATEMENT BUILDER
 
 Domain & Konteks
-  Domain   : ____________________
-  Konteks  : ____________________
+  Domain   : Internet of Things (IoT) & Smart Agriculture
+  Konteks  : Otomasi sistem pertanian hidroponik pada lingkungan dengan akses listrik terbatas.
 
 System Context
-  Input       : ____________________
-  Process     : ____________________
-  Output      : ____________________
-  Outcome     : ____________________
-  Constraints : ____________________
-  Stakeholders: ____________________
+  Input       : Data suhu dan kelembapan dari sensor DHT22, energi dari panel surya.
+  Process     : Pengolahan data oleh Arduino Uno untuk menentukan aktivasi pompa/kipas.
+  Output      : Status aktivasi perangkat (on/off), data yang dikirim ke dashboard IoT.
+  Outcome     : Stabilitas suhu dan kelembapan pada lingkungan tanaman hidroponik.
+  Constraints : Kapasitas baterai terbatas, ketergantungan pada cuaca, biaya sensor.
+  Stakeholders: Petani urban, pengembang sistem IoT, peneliti pertanian cerdas.
 
 Fenomena → Problem
-  Fenomena yang diamati             : ____________________
-  Gejala (symptom) yang terukur     : ____________________
-  Masalah yang didiagnosis          : ____________________
-  Masalah riset (researchable)      : ____________________
-  Variabel yang terukur             : ____________________
+  Fenomena yang diamati             : Kegagalan panen hidroponik akibat fluktuasi suhu dan kelalaian penyiraman manual.
+  Gejala (symptom) yang terukur     : Angka kematian bibit mencapai 30% pada kondisi cuaca ekstrem.
+  Masalah yang didiagnosis          : Kurangnya pemantauan real-time dan sistem respon otomatis yang mandiri energi.
+  Masalah riset (researchable)      : Bagaimana efektivitas integrasi sensor DHT22 dan algoritma thresholding pada sistem bertenaga surya dalam menjaga kestabilan parameter lingkungan hidroponik?
+  Variabel yang terukur             : Akurasi pembacaan sensor (Celsius/%RH), konsumsi daya (Watt), dan waktu respon sistem (detik).
 
 Problem Quality Check
-  [ ] Clarity — Apakah satu orang membaca akan paham?
-  [ ] Measurability — Apakah ada metrik kuantitatif?
-  [ ] Relevance — Apakah penting untuk domain?
-  [ ] Testability — Apakah bisa gagal?
-  [ ] Impact — Apakah ada kontribusi jika terjawab?
+  [x ] Clarity — Apakah satu orang membaca akan paham? Pernyataan masalah sudah jelas menghubungkan antara kendala energi (panel surya) dengan kebutuhan otomasi suhu pada hidroponik. Satu orang pembaca dapat langsung memahami bahwa fokus riset adalah kemandirian sistem dalam menjaga lingkungan tanaman.
+  [ x] Measurability — Apakah ada metrik kuantitatif? Ada metrik yang jelas dan dapat dihitung, yaitu derajat fluktuasi suhu (°C), persentase kelembapan (%RH), dan durasi ketersediaan daya baterai (jam).
+  [ x] Relevance — Apakah penting untuk domain? Sangat relevan bagi domain Smart Agriculture dan IoT, terutama untuk mencari solusi pertanian di lokasi yang tidak terjangkau jaringan listrik PLN (off-grid).
+  [ x] Testability — Apakah bisa gagal? Riset ini bersifat falsifiable (bisa dibuktikan salah). Sistem bisa dianggap gagal jika panel surya tidak mampu mengisi daya baterai dengan cukup atau jika suhu lingkungan tetap berada di luar ambang batas ideal tanaman meskipun pompa sudah aktif.
+  [ x] Impact — Apakah ada kontribusi jika terjawab? Jika terjawab, riset ini berkontribusi memberikan model teknis prototipe hidroponik yang efisien dan murah untuk diterapkan oleh petani lokal atau UMKM di sektor pertanian.
 
 Problem Statement (1 paragraf):
-  ____________________
+Sistem pertanian hidroponik seringkali mengalami kegagalan akibat ketidakstabilan parameter lingkungan dan keterbatasan akses energi listrik di lokasi lahan. Penelitian ini bertujuan untuk mengatasi masalah tersebut melalui rancang bangun sistem IoT berbasis Arduino yang mengintegrasikan energi terbarukan panel surya dan otomasi sensor DHT22. Fokus riset adalah menguji sejauh mana sistem ini dapat secara konsisten menjaga ambang batas suhu dan kelembapan secara mandiri tanpa intervensi manual yang berkelanjutan.
 ```
 
 ---
@@ -102,18 +102,18 @@ Problem Statement (1 paragraf):
 
 Pilih satu topik di bidang TI yang diminati. Transformasikan melalui 5 tahap Problem Formation Model.
 
-**Topik awal:** ________________________________________
+**Topik awal:** Otomasi IoT di Sektor Pertanian
 
 | Tahap | Hasil |
 |-------|-------|
-| Reality | *Contoh: Aplikasi e-commerce sering ditinggalkan saat checkout* |
-| Observed Issue (Symptom) | *Contoh: Bounce rate checkout 68%* |
-| Diagnosed Problem (Root Cause) | |
-| Researchable Problem | |
-| Measurable Variable | |
+| Reality |Tanaman hidroponik membutuhkan pengawasan ketat terhadap suhu dan air. |
+| Observed Issue (Symptom) |Tanaman layu karena suhu di atas 30°C yang tidak segera ditangani secara manual. |
+| Diagnosed Problem (Root Cause) |Tidak adanya mekanisme pendinginan otomatis yang bekerja 24 jam karena kendala daya listrik lokal.|
+| Researchable Problem |Analisis performa sistem kontrol otomatis berbasis IoT dalam menstabilkan suhu mikro lingkungan hidroponik. |
+| Measurable Variable |Derajat fluktuasi suhu (°C) dan durasi ketersediaan daya baterai panel surya (jam). |
 
-**Apakah terjebak solution-first thinking?** [ ] Ya / [ ] Tidak
-> Jika ya, kembali ke tahap mana? ________________________
+**Apakah terjebak solution-first thinking?** [ ] Ya / [ x] Tidak
+> Jika ya, kembali ke tahap mana? 
 
 ---
 
@@ -123,14 +123,14 @@ Gambarkan konteks sistem dari masalah riset di Latihan 1.
 
 | Komponen | Deskripsi |
 |----------|----------|
-| Input | *Contoh: Request HTTP dari browser pengguna* |
-| Process | |
-| Output | |
-| Outcome | |
-| Constraints | |
-| Stakeholders | |
+| Input | Data suhu/kelembapan udara, intensitas cahaya matahari, tegangan baterai. |
+| Process |Logika perbandingan (IF-THEN) pada mikrokontroler untuk kendali aktuator. |
+| Output |Tampilan data pada layar LCD atau aplikasi, semprotan air/kipas yang menyala. |
+| Outcome |Lingkungan tumbuh tanaman yang optimal secara otomatis. |
+| Constraints |Keakuratan sensor yang terbatas dan fluktuasi cuaca yang menghambat pengisian daya. |
+| Stakeholders |Pemilik kebun hidroponik, penyedia solusi teknologi pertanian cerdas. |
 
-**Komponen mana yang paling relevan dengan masalah riset?** _______________
+**Komponen mana yang paling relevan dengan masalah riset?** Process (Logika otomasi) dan Constraints (Energi terbatas).
 
 ---
 
@@ -140,17 +140,16 @@ Evaluasi problem statement yang sudah dibuat menggunakan 5 kriteria.
 
 | Kriteria | Skor (1-5) | Justifikasi |
 |----------|-----------|-------------|
-| Clarity | *Contoh: 4 — cukup jelas tapi perlu spesifikasi dataset* | |
-| Measurability | | |
-| Relevance | | |
-| Testability | | |
-| Impact | | |
+| Clarity |5 |Sangat jelas antara variabel input (IoT/Panel surya) dan output (stabilitas hidroponik). |
+| Measurability | 5|Menggunakan angka eksak untuk suhu, kelembapan, dan daya listrik.|
+| Relevance |4 |Sangat relevan dengan isu smart farming dan energi hijau saat ini. |
+| Testability |5 |Hasilnya bisa terukur gagal jika sistem mati atau suhu tetap tinggi. |
+| Impact | 4|Memberikan bukti nyata efisiensi teknologi IoT untuk UMKM tani. |
 
-**Skor total:** _____ / 25
+**Skor total:** 23 / 25
 
 **Problem statement versi final (1 paragraf):**
-> ___________________________________________________
-> ___________________________________________________
+> Ketidakmampuan menjaga parameter lingkungan secara real-time menjadi penyebab utama rendahnya produktivitas hidroponik, terutama di area yang kekurangan infrastruktur listrik. Riset ini mengusulkan solusi berupa sistem otomasi cerdas berbasis IoT yang ditenagai panel surya untuk memastikan kontrol suhu dan kelembapan berjalan secara otonom. Melalui pengujian fungsionalitas artefak, penelitian ini akan membuktikan apakah integrasi teknologi ini dapat menurunkan fluktuasi suhu lingkungan tanaman sekaligus mempertahankan ketersediaan daya sistem secara berkelanjutan.
 
 ---
 
@@ -159,5 +158,4 @@ Evaluasi problem statement yang sudah dibuat menggunakan 5 kriteria.
 > Bandingkan "masalah" yang biasa ditemui saat coding (bug, error) dengan masalah riset. Apa perbedaan fundamental dalam cara mendefinisikan dan mendekati keduanya?
 
 **Jawaban:**
-> ___________________________________________________
-> ___________________________________________________
+> Perbedaan fundamentalnya terletak pada tujuan akhirnya. Saat coding (engineering), masalah didefinisikan sebagai "bug" yang harus segera diperbaiki agar sistem jalan. Namun dalam riset, masalah didefinisikan sebagai "gap" atau ketidaktahuan. Saat coding kita bertanya "Bagaimana cara menyambungkan sensor ini ke Arduino?", sedangkan dalam riset kita bertanya "Apakah sensor ini cukup akurat dan stabil untuk menjaga ekosistem tanaman dalam jangka panjang?". Riset mencari bukti ilmiah, bukan sekadar memperbaiki fungsi.
