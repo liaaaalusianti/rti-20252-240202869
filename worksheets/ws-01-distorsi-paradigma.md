@@ -61,25 +61,25 @@ Dalam DSR, artefak **bukan tujuan akhir** — ia adalah instrumen untuk menghasi
 ## Template A.1 — Research Mindset Self-Assessment
 
 ```
-Nama Peneliti    : ____________________
-Tanggal          : ____________________
+Nama Peneliti    : Lia Lusianti
+Tanggal          : 18 april 2026
 
 1. Ketika membaca klaim "metode X 95% akurat":
-   - Pertanyaan pertama saya: ____________________
-   - Data yang dibutuhkan untuk verifikasi: ____________________
+   - Pertanyaan pertama saya: Bagaimana distribusi data yang digunakan untuk pengujian, dan apakah kondisi lingkungan saat pengambilan data sudah mencakup berbagai skenario ekstrem?
+   - Data yang dibutuhkan untuk verifikasi: Matriks konfusi (confusion matrix), spesifikasi teknis sensor yang digunakan, serta log data mentah sebelum diproses.
 
 2. Posisi paradigma:
-   - Pendekatan: [ ] Positivis  [ ] Interpretivis  [ ] Design Science  [ ] Mixed
-   - Alasan: ____________________
+   - Pendekatan: [ ] Positivis  [ ] Interpretivis  [ x] Design Science  [ ] Mixed
+   - Alasan: Riset ini berfokus pada pembangunan sebuah artefak (sistem otomasi hidroponik) untuk membuktikan bahwa integrasi IoT dan energi terbarukan dapat memecahkan masalah efisiensi pertanian.
 
 3. Identifikasi distorsi:
-   - Asumsi tersembunyi: ____________________
-   - Sumber bias potensial: ____________________
-   - Langkah mitigasi: ____________________
+   - Asumsi tersembunyi: Sistem dianggap akan selalu mendapatkan paparan sinar matahari yang konstan untuk panel surya.
+   - Sumber bias potensial: Penempatan sensor suhu yang mungkin terlalu dekat dengan komponen elektronik yang panas.
+   - Langkah mitigasi: Melakukan kalibrasi sensor secara berkala dengan alat ukur standar industri dan menggunakan teknik shielding pada sensor.
 
 4. Komitmen etika:
-   - Data yang tidak akan dimanipulasi: ____________________
-   - Batasan yang diakui sejak awal: ____________________
+   - Data yang tidak akan dimanipulasi:Log waktu respons (latensi) pengiriman data dari sensor ke dashboard dan pembacaan asli parameter lingkungan.
+   - Batasan yang diakui sejak awal: Keterbatasan kapasitas baterai pada panel surya yang mungkin mempengaruhi stabilitas sistem saat cuaca mendung berkepanjangan.
 ```
 
 ---
@@ -93,23 +93,23 @@ Pilih satu paper riset di bidang TI yang mengklaim "metode X meningkatkan perfor
 > **Contoh domain TI:** "Deteksi anomali lalu-lintas jaringan menggunakan CNN — akurasi meningkat 94% vs baseline SVM 87%." Distorsi potensial: apakah dataset normal/anomali seimbang? Apakah hanya diuji pada satu vendor traffic?
 
 **Paper yang dipilih:**
-> Judul: _______________________________________________
-> Penulis (Tahun): ______________________________________
-> Sumber/Link DOI: _____________________________________
+> Judul: Desain dan Prototipe Integrasi IoT dalam Pertanian Hidroponik Cerdas Berbasis Energi Terbarukan
+> Penulis (Tahun): M.R. Fachrizal, dkk. (2025)
+> Sumber/Link DOI: (https://journal.stmiki.ac.id/index.php/jimik/article/view/1134)
 
 | Tahap | Apa yang Dilakukan | Potensi Distorsi |
 |-------|-------------------|-----------------|
-| Reality → Data | *Contoh: Kumpulkan log server 30 hari* | *Contoh: Hanya ambil jam sibuk* |
-| Data → Processing | | |
-| Processing → Analysis | | |
-| Analysis → Inference | | |
-| Inference → Knowledge | | |
+| Reality → Data |Mengambil data suhu dan kelembapan udara melalui sensor DHT22 pada instalasi hidroponik.|Sensor Noise: Penempatan sensor yang terkena sinar matahari langsung dapat memberikan bacaan suhu lebih tinggi dari suhu nutrisi sebenarnya. |
+| Data → Processing |Mengirimkan data dari Arduino Uno ke platform IoT untuk ditampilkan di dashboard.|Latency Distortion: Jika koneksi internet tidak stabil, data yang diproses bisa mengalami keterlambatan (delay), sehingga data tidak lagi bersifat real-time.|
+| Processing → Analysis |Membandingkan data sensor dengan ambang batas (threshold) untuk menyalakan pompa/kipas secara otomatis. |Threshold Bias: Penentuan ambang batas yang terlalu kaku mungkin tidak cocok jika jenis tanaman hidroponiknya diganti (misal: selada vs cabai). |
+| Analysis → Inference |Menyimpulkan bahwa penggunaan panel surya cukup untuk menggerakkan seluruh sistem IoT. |Contextual Bias: Kesimpulan ini mungkin hanya valid saat cuaca cerah; saat musim hujan, daya mungkin tidak mencukupi (tidak digeneralisasi). |
+| Inference → Knowledge |Menyatakan bahwa sistem otomasi ini meningkatkan efisiensi pemeliharaan hidroponik secara signifikan. |Measurement Validity: Jika "efisiensi" tidak diukur dengan angka pertumbuhan tanaman, maka klaim ini bersifat subjektif. |
 
-**Distorsi paling besar di tahap:** ________________________
+**Distorsi paling besar di tahap:** Reality → Data (Akurasi Sensor)
 
 **Dua distorsi spesifik yang teridentifikasi:**
-1. ___________________________________________________
-2. ___________________________________________________
+1. Environmental Bias: Selection Bias: Pengambilan data performa sistem hanya dilakukan pada durasi waktu tertentu yang optimal.
+2. Sampling Rate Distortion: Penggunaan sensor kelas hobi (DHT22) mungkin memiliki margin error yang lebih besar dibandingkan sensor standar industri.
 
 ---
 
@@ -119,30 +119,29 @@ Skenario: Seorang peneliti menemukan bahwa jika 3 data point outlier dihapus, ha
 
 | Perspektif | Analisis |
 |------------|---------|
-| Kejujuran ilmiah | *Contoh: Laporkan kedua versi (dengan dan tanpa outlier)* |
-| Transparansi | |
-| Peer review | |
+| Kejujuran ilmiah | Peneliti harus melaporkan keberadaan outlier tersebut karena itu adalah bagian dari realitas eksperimen yang mungkin disebabkan oleh kegagalan sensor atau gangguan daya.|
+| Transparansi |Menjelaskan secara rinci alasan mengapa data tersebut dianggap sebagai outlier (misalnya karena gangguan teknis yang teridentifikasi). |
+| Peer review |Menyembunyikan data demi hasil signifikan akan menyesatkan peneliti lain yang mencoba mereplikasi sistem ini. |
 
 **Keputusan akhir dan justifikasi:**
-> ___________________________________________________
+> Melaporkan kedua hasil tersebut (dengan dan tanpa outlier) di dalam laporan. Jika outlier tersebut memang disebabkan oleh kerusakan teknis yang jelas, peneliti boleh mengeksklusinya namun tetap wajib memberikan catatan kaki atau penjelasan teknis mengenai pengecualian tersebut untuk menjaga integritas riset.
 
 ---
 
 ## Latihan 3 — Posisi Paradigma
 
-**Topik riset:** ________________________________________
+**Topik riset:** Rancang Bangun Sistem Monitoring dan Otomasi Hidroponik Berbasis IoT dan Panel Surya.
 
 > **Skala 1–5:** 1 = tidak sesuai sama sekali dengan topik ini, 5 = sangat sesuai dan dominan digunakan pada riset bertopik serupa.
 
 | Kriteria | Positivis | Interpretivis | Design Science |
 |----------|-----------|---------------|----------------|
-| Kesesuaian dengan topik (1–5) | *Contoh: 4 — topik kuantitatif, cocok uji hipotesis* | *Contoh: 2 — topik tidak studi makna/konteks* | *Contoh: 5 — membangun artefak untuk uji klaim* |
-| Jenis data yang dikumpulkan | *Metrik numerik, log eksperimen* | *Wawancara, observasi kualitatif* | *Hasil uji artefak, komparasi kinerja* |
-| Limitasi paradigma | | | |
+| Kesesuaian dengan topik (1–5) |4|2|5|
+| Jenis data yang dikumpulkan |Metrik akurasi sensor, efisiensi daya panel surya. |Persepsi petani terhadap kemudahan antarmuka sistem.|Keberhasilan fungsi otomasi dan performa artefak. |
+| Limitasi paradigma |Kurang mengeksplorasi sisi sosial penerimaan teknologi. |Sulit mengukur keandalan sistem secara teknis/numerik. |Terlalu fokus pada "pembuatan alat" daripada teori mendasar. |
 
-**Paradigma yang dipilih:** _____________________________
-**Alasan:** ____________________________________________
-
+**Paradigma yang dipilih:** Design Science Research (DSR)
+**Alasan:** Karena fokus utama riset ini adalah menciptakan solusi praktis berupa artefak teknologi untuk memecahkan masalah pertanian, di mana validasi dilakukan melalui pengujian performa artefak tersebut.
 ---
 
 ## Refleksi
@@ -150,5 +149,5 @@ Skenario: Seorang peneliti menemukan bahwa jika 3 data point outlier dihapus, ha
 > Sebelum membaca materi ini, apakah pernah mempertanyakan klaim "95% akurat"? Setelah memahami rantai distorsi, pertanyaan apa yang sekarang akan diajukan saat membaca paper?
 
 **Jawaban:**
-> ___________________________________________________
-> ___________________________________________________
+> Sebelum mempelajari materi ini, saya cenderung menganggap angka akurasi tinggi sebagai jaminan kualitas sebuah sistem. Setelah memahami rantai distorsi, saya menyadari bahwa angka tersebut bisa saja bias. Pertanyaan yang akan saya ajukan sekarang adalah: "Bagaimana kondisi lingkungan saat data diambil, dan apakah metrik yang digunakan benar-benar merepresentasikan keberhasilan sistem dalam kondisi dunia nyata yang tidak menentu?"
+
