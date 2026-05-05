@@ -46,7 +46,7 @@ Gap terkuat = kombinasi 2+ jenis.
 
 ### Baseline Selection — 3 Kriteria
 
-| Kriteria | Pertanyaan |
+| Kriteria | Pertanyaan | 
 |----------|-----------|
 | **Relevan** | Apakah menyelesaikan masalah yang sama? |
 | **Representatif** | Apakah mewakili common practice? |
@@ -72,44 +72,51 @@ Membandingkan deep learning 2024 dengan decision tree sederhana tanpa justifikas
 
 ---
 
-## Template A.3 — Literature Mapping & Gap Identification
+## A.3 — Literature Mapping & Gap Identification
 
 ```
 LITERATURE MAPPING
 
-Topik      : ____________________
-Database   : ____________________
-Query      : ____________________
-Tahun      : ____________________
-Hasil awal : ____ paper → Screening → ____ paper final
+Topik      : Implementasi AI dalam Sistem Keamanan Kota (IKN) 
+Database   : Google Scholar/Portal Jurnal Nasional (.ac.id)
+Query      : Artifical Intelligence city security, AI keamanan kota, AI smart city scurity.
+Tahun      : 2020-2024
+Hasil awal : ±20 paper → Screening → 5-7 paper final
 
 Literature Matrix (concept-centric):
 
 | Study | Tahun | Method | Data | Result | Limitation |
 |-------|-------|--------|------|--------|------------|
-|       |       |        |      |        |            |
-
+|Rahmawati et al.       |2024       |literature Review    |jurnal& refrensi skunder   |AI meningkatkan deteksi kejahatan & respon     |Privasi, biaya, keandalan          |
+|Lubis|2021| Implementasi AI| Data Manufaktur| AI meningkatkan efisiensi sistem| Tidak fokus ke keamanan kota|
+|Zsazsa & Sitepu|2023| Studi AI publik| Data Pelayanan Publik| AI meningkatkan kualitas layanan|Kurang spesifik keamanan|
+|ITI Report|2023| Review| Data Skunder| AI punya potensi besar| Tantangan SDM & teknologi|
+|Purnama & Chotib|2022| Analisis kebijakan| Data Kebijakan| Dukungan pemerintah penting| Tidak bahas teknis AI|
 Pola yang ditemukan:
-  Metode dominan     : ____________________
-  Dataset umum       : ____________________
-  Limitasi berulang  : ____________________
-
+  Metode dominan     : Literature Review & Analisis konseptual
+  Dataset umum       : Data sekunder(jurnal, laporan, kebijakan)
+  Limitasi berulang  : 1. Privasi data 
+                       2. Biaya implementasi tinggi
+                       3. SDM belum siap
+                       4. keandalan sistem AI
 GAP IDENTIFICATION
 
-Gap 1: [Jenis: performance / method / data / context]
-  Deskripsi    : ____________________
-  Bukti        : ____________________
-  Signifikansi : ____________________
+Gap 1: [Jenis:method / impementation]
+  Deskripsi    : Penelitian masih dominan berupa literature review, belum banyak implementasi sistem nyata.
+  Bukti        : Dalam jurnal hanya menggunakan metode literature review, tidak menyertakan prototipe sistem. 
+  Signifikansi : Memerlukan penelitian berbasis implementasi agar solusi bisa diterapkan, bukan hanya teori.
 
-Gap 2: [Jenis: ____]
-  Deskripsi    : ____________________
-  Bukti        : ____________________
-  Signifikansi : ____________________
+Gap 2: [Jenis:context/integration]
+  Deskripsi    : Belum ada integrasi AI dengan sistem real-time berbasis IoT secara optimal.
+  Bukti        : dalam jurnal disebutkan bahwa AI masih menghadapi masalah keandalan dan integrasi sistem.
+  Signifikansi : integrasi penting untuk monitoring langsung(real-time) di smart city.
 
 Baseline Selection:
 | Baseline | Relevansi | Representatif | Source |
 |----------|-----------|---------------|--------|
-|          |           |               |        |
+| AI Video Surveillance         |digunakan untuk deteksi aktivitas mencurigakan pada keamanan kota            |  digunakan secara luas dalam peneliatian dan implementasi smart city berbasis AI             |  Rahmawati et al., 2024
+|conventional CCTV | sistem keamanan dasar tanpa AI | merupakan sistem standar yang digunakan sebelum AI | sistem umum|
+|IoT Monitoring System | digunakan untuk monitoring real -time | banyak digunakan dalam sistem monitoring modrn berbasis IoT | Literatur IoT |    |
 ```
 
 ---
@@ -123,20 +130,20 @@ Gunakan topik riset dari WS-02. Cari minimal 5 paper relevan menggunakan databas
 > - Tulis query Boolean yang digunakan: contoh `("object detection" OR "image classification") AND ("edge computing") NOT ("medical")`. Dokumentasikan query secara eksplisit.
 > - Akses gratis: buka Google Scholar → cari judul paper → klik [PDF] jika tersedia, atau akses lewat campus VPN
 
-**Topik riset:** ________________________________________
-**Query pencarian:** ____________________________________
-**Database:** ___________________________________________
+**Topik riset:** Rancang Bangun Sistem Monitoring dan Otomasi Hidroponik Berbasis IoT dan Panel Surya.
+**Query pencarian:** ("Internet of Things" OR "IoT") AND ("Hydroponic" OR "Agriculture") AND ("Solar Panel" OR "Renewable Energy")
+**Database:** _Google Scholar / IEEE Xplore.
 
 | # | Study | Tahun | Method | Dataset | Result | Limitasi |
 |---|-------|-------|--------|---------|--------|----------|
 | 1 | *Contoh: Rahman et al.* | *2023* | *CNN* | *ImageNet subset* | *Acc 91%* | *Hanya 3 kelas* |
-| 2 | | | | | | |
-| 3 | | | | | | |
-| 4 | | | | | | |
-| 5 | | | | | | |
+| 2 |Fachrizal et al. |2025 |Arduino + DHT22 + Solar Panel |Solar Panel	Real-time sensor log |Prototipe fungsional & mandiri energi |Belum diuji saat cuaca ekstrem (mendung lama) |
+| 3 |Pratama et al. |2024 |IoT Cloud + Hybrid Architecture |Architecture	SME Transaction logs |Efisiensi operasional naik 20% |Fokus pada data manajemen, bukan otomasi fisik |
+| 4 |Sari & Wijaya |2023 |Fuzzy Logic + NodeMCU |NodeMCU	Sensor pH & TDS |Kontrol nutrisi lebih presisi |Konsumsi daya tinggi, tidak pakai panel surya |
+| 5 |Budiman et al. |2024 |ESP32 + LoRa |Long-range sensor data |Transmisi data hingga 2km |Throughput data kecil, tidak cocok untuk video |
 
-**Pola yang terlihat — Metode dominan:** ___________________
-**Limitasi yang berulang:** ______________________________
+**Pola yang terlihat — Metode dominan:** Penggunaan mikrokontroler (Arduino/ESP32) yang dikombinasikan dengan platform Cloud untuk visualisasi data.
+**Limitasi yang berulang:** Ketergantungan pada stabilitas energi (baterai) dan akurasi sensor kelas hobi (low-cost) dalam kondisi lapangan.
 
 ---
 
@@ -146,14 +153,14 @@ Berdasarkan tabel di Latihan 1, identifikasi gap.
 
 | Jenis Gap | Ditemukan? | Gap Statement |
 |-----------|-----------|---------------|
-| Performance Gap | [ ] Ya / [ ] Tidak | *Contoh: Akurasi turun di bawah 80% untuk kelas minoritas* |
-| Method Gap | [ ] Ya / [ ] Tidak | |
-| Data Gap | [ ] Ya / [ ] Tidak | |
-| Context Gap | [ ] Ya / [ ] Tidak | |
+| Performance Gap | [ x] Ya / [ ] Tidak |Penurunan performa sistem IoT saat tegangan panel surya turun di bawah ambang batas operasional.|
+| Method Gap | [ x] Ya / [ ] Tidak |Jarangnya penggunaan algoritma manajemen daya (sleep mode) untuk memperpanjang umur baterai pada hidroponik. |
+| Data Gap | [ ] Ya / [x ] Tidak |Data sensor suhu/kelembapan sudah sangat banyak tersedia. |
+| Context Gap | [ x] Ya / [ ] Tidak |Minimnya riset yang menguji durabilitas sistem pada lingkungan pertanian dengan kelembapan ekstrem tinggi. |
 
-**Gap utama yang dipilih:** _____________________________
+**Gap utama yang dipilih:** Method Gap & Performance Gap pada manajemen energi.
 **Mengapa gap ini penting (bukan sekadar "belum ada yang meneliti")?**
-> ___________________________________________________
+>Karena sistem IoT pertanian yang "cerdas" menjadi tidak berguna jika mati saat tidak ada matahari. Mengoptimalkan cara sistem bekerja berdasarkan sisa daya baterai (manajemen energi) jauh lebih krusial untuk keberlanjutan panen daripada sekadar menambah sensor baru.
 
 ---
 
@@ -163,11 +170,11 @@ Pilih 2 baseline dari literatur yang sudah dibaca.
 
 | # | Baseline | Mengapa Relevan | Mengapa Representatif | Apakah SOTA? | Sumber |
 |---|----------|----------------|----------------------|-------------|--------|
-| 1 | *Contoh: RF + TF-IDF* | *Task sama: klasifikasi teks* | *Dipakai 6 dari 10 paper* | *Bukan, tapi common practice* | *Lee et al., 2022* |
-| 2 | | | | | |
+| 1 | Fuzzy Logic Control |Sama-sama mengontrol aktuator (pompa). |Standar untuk kontrol otomatis yang halus. | Ya, untuk kelas mikrokontroler. |Sari & Wijaya (2023) |
+| 2 |Sistem Kontrol On/Off Statis |Sama-sama menggunakan threshold suhu. |Metode paling standar di DIY IoT. |Bukan (Metode Dasar) |Fachrizal et al. (2025) |
 
-**Apakah pemilihan baseline ini bisa dianggap straw man?** [ ] Ya / [ ] Tidak
-> Justifikasi: ________________________________________
+**Apakah pemilihan baseline ini bisa dianggap straw man?** [ ] Ya / [ x] Tidak
+> Justifikasi: Baseline yang dipilih mencakup metode standar (On/Off) dan metode cerdas (Fuzzy), sehingga riset tidak membandingkan diri dengan sistem yang sengaja dibuat lemah, melainkan dengan standar industri dan akademis saat ini.
 
 ---
 
@@ -176,5 +183,4 @@ Pilih 2 baseline dari literatur yang sudah dibaca.
 > Apa perbedaan antara "belum ada yang meneliti ini" (klaim tanpa bukti) dengan research gap yang valid? Bagaimana cara membuktikan bahwa sebuah gap benar-benar ada?
 
 **Jawaban:**
-> ___________________________________________________
-> ___________________________________________________
+> Perbedaan fundamentalnya terletak pada bukti. Klaim "belum ada yang meneliti" seringkali hanya asumsi karena peneliti malas mencari. Sedangkan research gap yang valid dibuktikan melalui tabel literatur (Latihan 1) yang menunjukkan bahwa meski banyak riset di bidang tersebut, ada aspek spesifik (seperti efisiensi daya pada cuaca ekstrem) yang belum terselesaikan secara optimal. Cara membuktikannya adalah dengan menunjukkan keterbatasan (limitasi) dari penelitian-penelitian terdahulu secara sistematis.
