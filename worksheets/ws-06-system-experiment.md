@@ -80,25 +80,26 @@ Jika variabel tidak bisa di-map ke komponen apapun → arsitektur perlu didesain
 ```
 SYSTEM-EXPERIMENT MAPPING
 
-Research Question: ____________________
-
+Research Question: Bagaimana kinerja sistem keamanan berbasis Artificial Intelligence menggunakan metode deteksi objek berbasis computer vision dalam meningkatkan akurasi deteksi dan waktu respon dibandingkan sistem CCTV konvensional melalui simulasi menggunakan dataset video publik untuk mendukung transformasi smart city di Kabupaten Kebumen?
 Variable → Component Mapping:
 | Variabel | Tipe | Komponen Sistem | Cara Manipulasi/Pengukuran |
 |----------|------|-----------------|---------------------------|
-|          | IV   |                 |                           |
-|          | DV   |                 |                           |
-|          | CV   |                 |                           |
-
+|Jenis sistem keamanan| IV   |Modul deteksi objek   |Mengganti model AI ↔ baseline CCTV konvensional melalui config|
+|Kinerja sistem       | DV   |Metrics evaluator     |Menghitung Accuracy, Precision, Recall, F1-score              |
+|Waktu respon         | DV   |Timer / latency logger|Mengukur waktu proses tiap video (ms)                         |
+|Riset TI yang Relevan| CV   |Input dataset manager |Menggunakan dataset yang sama pada semua eksperimen           |
 4 Prinsip Desain:
-  [ ] Traceability — Setiap komponen bisa ditelusuri ke variabel
-  [ ] Variable Isolation — IV bisa diubah tanpa mengubah CV
-  [ ] Measurement Integration — Pengukuran DV built-in
-  [ ] Reproducibility — Setup bisa direkonstruksi
+  [X] Traceability — Setiap komponen bisa ditelusuri ke variabel
+  [X] Variable Isolation — IV bisa diubah tanpa mengubah CV
+  [X] Measurement Integration — Pengukuran DV built-in
+  [X] Reproducibility — Setup bisa direkonstruksi
 
 Experimental Setup:
-  Input data     : ____________________
-  Parameter      : ____________________
-  Output format  : ____________________
+  Input data     : Dataset video pengawasan publik (public surveillance dataset)
+  Parameter      : 1. model_type = AI / conventional
+                   2. video_source = same dataset
+                   3. number_of_runs = 5
+  Output format  : Tabel hasil Accuracy, Precision, Recall, F1-score, dan Latency
 ```
 
 ---
@@ -107,15 +108,16 @@ Experimental Setup:
 
 Gunakan RQ dan variabel dari WS-05. Petakan ke komponen sistem.
 
-**RQ:** __________________________________________________
+**RQ:** Bagaimana kinerja sistem keamanan berbasis AI dibandingkan CCTV konvensional melalui simulasi menggunakan dataset video publik?
 
 | Variabel | Tipe | Komponen Sistem | Cara Manipulasi / Pengukuran |
 |----------|------|-----------------|---------------------------|
-| *Contoh: Jenis model* | *IV* | *Modul classifier (swap RF ↔ CNN)* | *Ganti config `model_type`* |
-| | DV | | |
-| | CV | | |
+|Jenis sistem   | IV |Detection module |Ubah model_type         |
+|Kinerja sistem | DV |Evaluation module|Hitung confusion matrix |
+|Waktu respon   | CV |Timer logger     |Catat latency           |
+|Dataset        | CV |Dataset loader   |Gunakan dataset sama    |
 
-**Apakah semua variabel bisa di-map?** [ ] Ya / [ ] Tidak
+**Apakah semua variabel bisa di-map?** [X] Ya / [ ] Tidak
 > Jika tidak, komponen apa yang perlu ditambahkan? _________
 
 ---
@@ -126,15 +128,14 @@ Evaluasi desain sistem terhadap 4 prinsip.
 
 | Prinsip | Status | Bukti / Penjelasan |
 |---------|--------|-------------------|
-| Traceability | *Contoh: ✅ — setiap modul punya label variabel* | |
-| Modularity | | |
-| Controllability | | |
-| Measurability | | |
+| Traceability    |✅ |Semua modul terkait langsung ke variabel    |
+| Modularity      |✅ |Modul AI dapat diganti tanpa ubah modul lain|
+| Controllability |✅ |Parameter eksperimen disimpan di config     |
+| Measurability   |✅ |Output metrik otomatis dihasilkan           |
 
-**Prinsip mana yang paling sulit dipenuhi?** _______________
+**Prinsip mana yang paling sulit dipenuhi?** Controllability
 **Strategi untuk mengatasinya:**
-> ___________________________________________________
-
+> Menggunakan file konfigurasi (config.yaml) agar parameter eksperimen dapat diubah tanpa mengubah kode program.
 ---
 
 ## Latihan 3 — Ablation Study Planning
@@ -146,15 +147,13 @@ Jika sistem memiliki 3 komponen utama, rencanakan ablation study.
 
 | Kondisi | Komponen A | Komponen B | Komponen C | Hasil yang Diharapkan |
 |---------|-----------|-----------|-----------|----------------------|
-| Full | *Contoh: ✅ CNN* | *Contoh: ✅ Temporal features* | *Contoh: ✅ Z-score norm* | *Baseline penuh* |
-| – A | ❌ (ganti RF) | ✅ | ✅ | |
-| – B | ✅ | ❌ (tanpa temporal) | ✅ | |
-| – C | ✅ | ✅ | ❌ (tanpa normalisasi) | |
-
-**Komponen mana yang diprediksi paling berkontribusi?** _____
+| Full |✅             | ✅                  | ✅                     |performa terbaik          |
+| – A  | ❌ (ganti RF) | ✅                  | ✅                     |performa turun            |
+| – B  | ✅            | ❌ (tanpa temporal) | ✅                     |akurasi menurun           |
+| – C  | ✅            | ✅                  | ❌ (tanpa normalisasi) |metrik tidak dapat diukur |
+**Komponen mana yang diprediksi paling berkontribusi?** AI Detection Model
 **Mengapa?**
-> ___________________________________________________
-
+> Karena komponen ini merupakan inti sistem yang secara langsung menentukan kemampuan deteksi objek dan membedakan performa dengan baseline.
 ---
 
 ## Refleksi
@@ -162,5 +161,5 @@ Jika sistem memiliki 3 komponen utama, rencanakan ablation study.
 > Apa risiko jika sistem dibangun seperti produk (monolitik, fitur lengkap) lalu baru dilakukan eksperimen? Mengapa arsitektur modular penting untuk riset?
 
 **Jawaban:**
-> ___________________________________________________
-> ___________________________________________________
+> Jika sistem dibangun secara monolitik, perubahan satu komponen dapat memengaruhi seluruh sistem sehingga sulit mengisolasi variabel penelitian. Hal ini membuat hasil eksperimen sulit direproduksi dan mengurangi validitas penelitian.
+> Karena arsitektur modular memungkinkan perubahan hanya pada variabel yang diuji tanpa memengaruhi komponen lain, sehingga eksperimen lebih terkontrol dan hasil lebih valid.

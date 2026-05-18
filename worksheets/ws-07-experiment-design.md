@@ -68,36 +68,36 @@ Ancaman validitas harus diidentifikasi **sebelum** eksperimen dan mitigasinya di
 ```
 EXPERIMENT DESIGN
 
-Research Question : ____________________
-Hypothesis        : ____________________
-Tipe Eksperimen   : [ ] Comparison  [ ] Ablation  [ ] Parameter
+Research Question : Bagaimana kinerja sistem keamanan berbasis Artificial Intelligence menggunakan metode deteksi objek berbasis computer vision dalam meningkatkan akurasi deteksi dan waktu respon dibandingkan sistem CCTV konvensional melalui simulasi menggunakan dataset video publik untuk mendukung transformasi smart city di Kabupaten Kebumen?
+Hypothesis        : Sistem keamanan berbasis Artificial Intelligence memiliki performa lebih baik dibandingkan sistem CCTV konvensional dalam hal akurasi deteksi dan waktu respon.
+Tipe Eksperimen   : [x] Comparison  [ ] Ablation  [ ] Parameter
 
 Kondisi Eksperimen:
 | Kondisi | Deskripsi | IV Value | CV Settings |
 |---------|-----------|----------|-------------|
-| Control |           |          |             |
-| Treatment |         |          |             |
+| Control  |Sistem baseline |CCTV konvensional          |dataset sama, preprocessing sama, seed 42|
+| Treatment|Sistem usulan   |AI berbasis computer vision|dataset sama, preprocessing sama, seed 42|
 
 Fairness Checklist:
-  [ ] Dataset identik untuk semua kondisi
-  [ ] Preprocessing setara
-  [ ] Tuning effort setara
-  [ ] Environment identik
-  [ ] Metrik evaluasi sama
+  [x] Dataset identik untuk semua kondisi
+  [x] Preprocessing setara
+  [x] Tuning effort setara
+  [x] Environment identik
+  [x] Metrik evaluasi sama
 
 Threat Analysis:
 | Threat Type | Ancaman Spesifik | Mitigasi |
 |-------------|-----------------|----------|
-| Internal    |                 |          |
-| External    |                 |          |
-| Construct   |                 |          |
-| Conclusion  |                 |          |
+| Internal    |Data leakage antara train-test|gunakan train-test split yang benar         |
+| External    |Dataset terlalu spesifik      |gunakan dataset publik yang beragam         |
+| Construct   |Accuracy saja tidak cukup     |tambah Precision, Recall, F1, Latency       |
+| Conclusion  |Sampel terlalu kecil          |gunakan cukup banyak video dan repeated runs|
 
 Statistical Plan:
-  Uji statistik   : ____________________
-  Justifikasi      : ____________________
-  Alpha            : ____________________
-  Effect size min  : ____________________
+  Uji statistik   : Independent t-test
+  Justifikasi      : Karena membandingkan dua kelompok independen (AI vs CCTV)
+  Alpha            : 0.05
+  Effect size min  : 0.2 (small effect)
 ```
 
 ---
@@ -106,13 +106,13 @@ Statistical Plan:
 
 Susun desain eksperimen berdasarkan RQ, variabel, dan sistem dari WS-04 sampai WS-06.
 
-**RQ:** __________________________________________________
+**RQ:** 
 **Tipe eksperimen:** [ ] Comparison / [ ] Ablation / [ ] Parameter
 
 | Kondisi | Deskripsi | IV Value | CV Settings |
 |---------|-----------|----------|-------------|
-| Control | *Contoh: RF baseline dari literatur* | *RF* | *Dataset X, 80:20 split, seed 42* |
-| Treatment | | | |
+| Control   |baseline dari sistem tradisional|CCTV konvensional|dataset sama, seed 42|
+| Treatment |sistem usulan                   |AI detection     |dataset sama, seed 42|
 
 ---
 
@@ -122,13 +122,13 @@ Evaluasi apakah desain eksperimen di Latihan 1 sudah fair.
 
 | Kriteria | Status | Detail |
 |----------|--------|--------|
-| Dataset identik | *Contoh: ✅ — sama-sama pakai CIC-MalMem-2022* | |
-| Preprocessing setara | | |
-| Tuning effort setara | | |
-| Environment identik | | |
-| Metrik evaluasi sama | | |
+| Dataset identik      |✅|menggunakan dataset video publik yang sama |
+| Preprocessing setara |✅|resize dan cleaning sama                   |
+| Tuning effort setara |✅|parameter diuji secara adil                |
+| Environment identik  |✅|hardware/software sama                     |
+| Metrik evaluasi sama |✅|accuracy, precision, recall, F1, latency   |
 
-**Ada yang tidak fair?** [ ] Ya / [ ] Tidak
+**Ada yang tidak fair?** [ ] Ya / [x] Tidak
 > Jika ya, bagaimana cara memperbaikinya? ________________
 
 ---
@@ -139,14 +139,14 @@ Identifikasi ancaman validitas untuk desain eksperimen ini.
 
 | Threat Type | Ancaman Spesifik | Mitigasi |
 |-------------|-----------------|----------|
-| Internal | *Contoh: Data leakage antara train-test* | *Contoh: Gunakan stratified split, validasi tidak ada overlap* |
-| External | | |
-| Construct | | |
-| Conclusion | | |
+| Internal   |data leakage                           |validasi split               |
+| External   |dataset tidak mewakili kondisi Kebumen |gunakan dataset yang beragam |
+| Construct  |metrik kurang representatif            |multi-metric evaluation      |
+| Conclusion |terlalu sedikit sampel                 |tambah jumlah eksperimen     |
 
-**Ancaman mana yang paling sulit dimitigasi?** _____________
+**Ancaman mana yang paling sulit dimitigasi?** External validity
 **Mengapa?**
-> ___________________________________________________
+> Karena penelitian menggunakan dataset publik sehingga kondisi nyata Kabupaten Kebumen mungkin tidak sepenuhnya terwakili
 
 ---
 
@@ -155,6 +155,6 @@ Identifikasi ancaman validitas untuk desain eksperimen ini.
 > Sebuah paper melaporkan "metode kami mengalahkan semua baseline." Apa 3 pertanyaan pertama yang harus diajukan untuk mengevaluasi klaim ini?
 
 **Jawaban:**
-1. ___________________________________________________
-2. ___________________________________________________
-3. ___________________________________________________
+1. Apakah semua baseline diuji pada kondisi yang sama?
+2. Apakah metrik evaluasi yang digunakan adil dan relevan?
+3. Apakah hasilnya signifikan secara statistik?

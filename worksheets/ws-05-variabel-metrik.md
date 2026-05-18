@@ -66,19 +66,19 @@ Metrik harus ditentukan **sebelum** eksperimen. Memilih metrik setelah melihat d
 ```
 VARIABLE & METRIC DEFINITION
 
-Research Question: ____________________
+Research Question: Bagaimana kinerja sistem keamanan berbasis Artificial Intelligence menggunakan metode deteksi objek berbasis computer vision dalam meningkatkan akurasi deteksi dan waktu respon dibandingkan sistem CCTV konvensional melalui simulasi menggunakan dataset video publik, untuk mendukung transformasi smart city di Kabupaten Kebumen?
 
 | Variabel | Tipe | Konsep | Metrik | Skala | Satuan | Cara Mengukur | Justifikasi |
 |----------|------|--------|--------|-------|--------|---------------|-------------|
-|          | IV   |        |        |       |        |               |             |
-|          | DV   |        |        |       |        |               |             |
-|          | CV   |        |        |       |        |               |             |
-
+|Jenis sistem keamanan| IV   |Pendekatan sistem keamanan  |AI-based vs CCTV konvensional         |Nominal |- |Membandingkan dua metode sistem melalui simulasi    |Variabel utama penelitian       |
+|Kinerja Sistem       | DV   |Efektivitas sistem          |Accuracy, Precision, Recall, F1-score |Ratio   |% |Dihitung dari confusion matrix hasil simulasi       |Mengukur kualitas deteksi objek |
+|Waktu respon         | DV   |Kecepatan sistem            |Latency                               |Ratio   |ms|Mengukur waktu pemrosesan video selama simulasi     |Mengukur efisiensi sistem       |
+| Dataset Video Publik| CV   |Konsistensi input           |Dataset sama untuk semua metode       |Nominal |- |Menggunakan dataset identik pada seluruh eksperimen |Menjaga fairness                |
 Alignment Check:
   RQ → Concept → Variable → Metric → Data → Result
-  [ ] Setiap langkah terdokumentasi
-  [ ] Tidak ada "lompatan logis"
-  [ ] Metrik mengukur apa yang dimaksud (construct validity)
+  [x ] Setiap langkah terdokumentasi
+  [x] Tidak ada "lompatan logis"
+  [x] Metrik mengukur apa yang dimaksud (construct validity)
 ```
 
 ---
@@ -87,15 +87,15 @@ Alignment Check:
 
 Gunakan RQ dari WS-04. Definisikan variabel dan metriknya.
 
-**RQ:** __________________________________________________
+**RQ:** Bagaimana kinerja sistem keamanan berbasis AI dibandingkan CCTV konvensional melalui simulasi menggunakan dataset video publik untuk mendukung smart city di Kebumen?
 
 | Variabel | Tipe | Konsep Abstrak | Metrik Konkret | Skala (NOIR) | Satuan |
 |----------|------|---------------|----------------|-------------|--------|
-| *Contoh: Jenis model* | *IV* | *Pendekatan klasifikasi* | *Categorical: CNN vs RF* | *Nominal* | *—* |
-| | DV | | | | |
-| | CV | | | | |
-
-**Apakah ada lompatan logis dalam rantai?** [ ] Ya / [ ] Tidak
+|Jenis sistem   |IV |Pendekatan keamanan |AI vs CCTV                           |Nominal |- |
+|Kinerja sistem |DV |Efektivitas         |Accuracy, Precision, Recall, F1-score|Ratio   |% |
+|Waktu respon   |CV |Kecepatan           |Latency                              |Ratio   |ms|
+|Dataset        |CV |Konsistensi input   |Dataset video publik yang sama       |Nominal |- |
+**Apakah ada lompatan logis dalam rantai?** [ ] Ya / [x] Tidak
 > Jika ya, di mana? ____________________________________
 
 ---
@@ -106,15 +106,15 @@ Evaluasi metrik DV yang dipilih di Latihan 1 menggunakan 3 kriteria.
 
 | Kriteria | Skor (1-5) | Justifikasi |
 |----------|-----------|-------------|
-| Representative | *Contoh: 4 — F1-Score mewakili keseimbangan precision-recall* | |
-| Sensitive | | |
-| Feasible | | |
+| Representative |5|Accuracy & F1-score mewakili performa deteksi|
+| Sensitive      |4|Dapat menangkap perbedaan kecil antar metode |
+| Feasible       |5|Mudah dhitung dari dataset                   |
 
-**Apakah perlu secondary metric?** [ ] Ya / [ ] Tidak
-> Jika ya, apa dan mengapa? _____________________________
+**Apakah perlu secondary metric?** [x] Ya / [ ] Tidak
+> Jika ya, apa dan mengapa? Karena selain akurasi, sistem keamanan harus cepat memberi respon.
 
 **Contoh kasus ceiling effect untuk metrik ini:**
-> ___________________________________________________
+> Jika kedua sistem sama-sama memiliki accuracy >98%, accuracy saja tidak cukup membedakan performa; perlu F1-score dan latency.
 
 ---
 
@@ -124,10 +124,10 @@ Bayangkan data yang akan dikumpulkan dari eksperimen. Evaluasi 4 dimensi kualita
 
 | Dimensi | Pertanyaan | Jawaban | Strategi Mitigasi |
 |---------|-----------|---------|------------------|
-| Completeness | *Apakah semua data point terkumpul?* | | |
-| Consistency | *Apakah ada kontradiksi internal?* | | |
-| Validity | *Apakah benar-benar mengukur yang dimaksud?* | | |
-| Representativeness | *Apakah sampel mewakili populasi target?* | | |
+| Completeness       |*Apakah semua data point terkumpul?*        |ya     |cek semua video diproses      |
+| Consistency        |*Apakah ada kontradiksi internal?*          |mungkin|standarisasi preprocessing    |
+| Validity           |*Apakah benar-benar mengukur yang dimaksud?*|ya     |gunakan metrik standar        |
+| Representativeness |*Apakah sampel mewakili populasi target?*   |cukup  |gunakan dataset publik beragam|
 
 ---
 
@@ -136,5 +136,4 @@ Bayangkan data yang akan dikumpulkan dari eksperimen. Evaluasi 4 dimensi kualita
 > Mengapa memilih metrik setelah melihat data dianggap p-hacking? Apa bedanya dengan eksplorasi data yang sah?
 
 **Jawaban:**
-> ___________________________________________________
-> ___________________________________________________
+> Karena peneliti bisa memilih hanya metrik yang menguntungkan hasil penelitiannya sehingga menghasilkan bias dan menurunkan validitas penelitian. Berbeda dengan eksplorasi data yang sah, di mana analisis tambahan dilakukan setelah eksperimen dan dilaporkan sebagai temuan eksploratif, bukan untuk membuktikan hipotesis utama.
