@@ -124,7 +124,7 @@ Dokumentasikan environment untuk eksperimen Anda (boleh environment saat ini ata
 | Runtime     | Python 3.12                            |
 | Framework   | Ultralytics YOLOv8, YOLOv5             |
 | Random Seed | 42                                     |
-                                          |
+
 
 **Dependencies (minimal 5):**
 
