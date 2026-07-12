@@ -68,28 +68,33 @@ Run gagal/anomali tidak boleh dihapus tanpa dokumentasi. Bisa jadi:
 ```
 EXECUTION PLAN
 
-EXECUTION PLAN
+| Run | Model  | Video         | Parameter            | Status    | Output             |
+| --- | ------ | ------------- | -------------------- | --------- | ------------------ |
+| 1   | YOLOv8 | depan_dprd    | imgsz=640, conf=0.25 | Completed | depan_dprd_run1    |
+| 2   | YOLOv8 | depan_dprd    | imgsz=640, conf=0.25 | Completed | depan_dprd_run2    |
+| 3   | YOLOv8 | depan_dprd    | imgsz=640, conf=0.25 | Completed | depan_dprd_run3    |
+| 4   | YOLOv8 | depan_pendopo | imgsz=640, conf=0.25 | Completed | depan_pendopo_run1 |
+| 5   | YOLOv8 | depan_pendopo | imgsz=640, conf=0.25 | Completed | depan_pendopo_run2 |
+| 6   | YOLOv8 | depan_pendopo | imgsz=640, conf=0.25 | Completed | depan_pendopo_run3 |
+| 7   | YOLOv8 | merdeka_timur | imgsz=640, conf=0.25 | Completed | merdeka_timur_run1 |
+| 8   | YOLOv8 | merdeka_timur | imgsz=640, conf=0.25 | Completed | merdeka_timur_run2 |
+| 9   | YOLOv8 | merdeka_timur | imgsz=640, conf=0.25 | Completed | merdeka_timur_run3 |
+| 10  | YOLOv5 | depan_dprd    | imgsz=640, conf=0.25 | Completed | depan_dprd_run1    |
+| 11  | YOLOv5 | depan_dprd    | imgsz=640, conf=0.25 | Completed | depan_dprd_run2    |
+| 12  | YOLOv5 | depan_dprd    | imgsz=640, conf=0.25 | Completed | depan_dprd_run3    |
+| 13  | YOLOv5 | depan_pendopo | imgsz=640, conf=0.25 | Completed | depan_pendopo_run1 |
+| 14  | YOLOv5 | depan_pendopo | imgsz=640, conf=0.25 | Completed | depan_pendopo_run2 |
+| 15  | YOLOv5 | depan_pendopo | imgsz=640, conf=0.25 | Completed | depan_pendopo_run3 |
+| 16  | YOLOv5 | merdeka_timur | imgsz=640, conf=0.25 | Completed | merdeka_timur_run1 |
+| 17  | YOLOv5 | merdeka_timur | imgsz=640, conf=0.25 | Completed | merdeka_timur_run2 |
+| 18  | YOLOv5 | merdeka_timur | imgsz=640, conf=0.25 | Completed | merdeka_timur_run3 |
 
-| Run # | Skenario | Seed | Parameter | Status | Waktu | Output File |
-|-------|----------|------|-----------|--------|-------|-------------|
-| 1 | YOLOv8 | 42 | imgsz=640, epochs=50, conf=0.25 | Planned | - | yolo_run01.csv |
-| 2 | YOLOv8 | 123 | imgsz=640, epochs=50, conf=0.25 | Planned | - | yolo_run02.csv |
-| 3 | SSD | 42 | imgsz=640, epochs=50, conf=0.25 | Planned | - | ssd_run01.csv |
-| 4 | SSD | 123 | imgsz=640, epochs=50, conf=0.25 | Planned | - | ssd_run02.csv |
-| ... | ... | ... | ... | ... | ... | ... |
 
-Jumlah runs per skenario : 20
+Jumlah model            : 2
+Jumlah video            : 3
+Run setiap video        : 3
 
-Total runs               : 40
-
-DATA LOG (per run):
-Run ID      : run-001
-Timestamp   : 2026-06-26 10:15 WIB
-Skenario    : YOLOv8
-Input       : Rekaman CCTV kendaraan Kabupaten Kebumen
-Output      : mAP@50, Precision, Recall, FPS, hasil deteksi kendaraan
-Anomali     : Tidak ada
-Catatan     : Semua parameter sesuai konfigurasi awal
+Total eksperimen        : 18 run
 ```
 
 ---
@@ -98,18 +103,20 @@ Catatan     : Semua parameter sesuai konfigurasi awal
 
 Susun execution plan untuk eksperimen Anda. Tentukan skenario, jumlah run, dan seed sebelum eksekusi.
 
-| Run # | Skenario | Seed | Parameter Kunci                | Status  |
-| ----- | -------- | ---- | ------------------------------ | ------- |
-| 1     | YOLOv8   | 42   | imgsz=640, epoch=50, conf=0.25 | Planned |
-| 2     | YOLOv8   | 123  | imgsz=640, epoch=50, conf=0.25 | Planned |
-| 3     | YOLOv8   | 999  | imgsz=640, epoch=50, conf=0.25 | Planned |
-| 4     | SSD      | 42   | imgsz=640, epoch=50, conf=0.25 | Planned |
-| 5     | SSD      | 123  | imgsz=640, epoch=50, conf=0.25 | Planned |
+| Run | Model  | Video         | Parameter            | Status    |
+| --- | ------ | ------------- | -------------------- | --------- |
+| 1   | YOLOv8 | depan_dprd    | imgsz=640, conf=0.25 | Completed |
+| 2   | YOLOv8 | depan_pendopo | imgsz=640, conf=0.25 | Completed |
+| 3   | YOLOv8 | merdeka_timur | imgsz=640, conf=0.25 | Completed |
+| 4   | YOLOv5 | depan_dprd    | imgsz=640, conf=0.25 | Completed |
+| 5   | YOLOv5 | depan_pendopo | imgsz=640, conf=0.25 | Completed |
+| 6   | YOLOv5 | merdeka_timur | imgsz=640, conf=0.25 | Completed |
 
 
-Total skenario: 2 (YOLOv8 dan SSD)
-Run per skenario: 20
-Total run keseluruhan: 40
+Total model: 2 (YOLOv8 dan YOLOv5)
+Jumlah video: 3
+Run per video: 3
+Total eksperimen: 18 run
 
 ---
 
@@ -127,25 +134,29 @@ Desain format data log untuk eksperimen Anda. Tentukan field apa saja yang akan 
 
 
 **Konfigurasi:**
-| Field                | Contoh         |
-| -------------------- | -------------- |
-| Seed                 | 42             |
-| Code Version         | commit a3d5c9f |
-| Epoch                | 50             |
-| Image Size           | 640 × 640      |
-| Confidence Threshold | 0.25           |
+| Field                | Contoh          |
+| -------------------- | --------------- |
+| Model                | YOLOv8 / YOLOv5 |
+| Image Size           | 640             |
+| Confidence Threshold | 0.25            |
+| Device               | CPU             |
+| Source               | Video CCTV      |
+
+**Hasil**
+| Metrik                | Tipe    |
+| --------------------- | ------- |
+| Preprocess Time (ms)  | float   |
+| Inference Time (ms)   | float   |
+| Postprocess Time (ms) | float   |
+| Total Kendaraan       | integer |
+| Mobil                 | integer |
+| Motor                 | integer |
+| Bus                   | integer |
+| Truk                  | integer |
 
 
-**Hasil:**
-| Metrik    | Tipe Data | Range Valid |
-| --------- | --------- | ----------- |
-| mAP@50    | float     | 0.0–1.0     |
-| Precision | float     | 0.0–1.0     |
-| Recall    | float     | 0.0–1.0     |
-| FPS       | float     | >0          |
 
-
-**Format output:** [x ] CSV / [x ] JSON / [ ] Database / [ ] Lainnya: ____
+**Format output:** [x ] CSV / [] JSON / [ ] Database / [ ] Lainnya: ____
 
 ---
 
@@ -153,12 +164,13 @@ Desain format data log untuk eksperimen Anda. Tentukan field apa saja yang akan 
 
 Rencanakan bagaimana menangani anomali. Untuk setiap jenis, tentukan langkah yang diambil.
 
-| Jenis Anomali                 | Contoh                                                      | Tindakan                                                                                        |
-| ----------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Run gagal (crash)             | Program berhenti saat proses inferensi                      | Dokumentasikan error, periksa konfigurasi, kemudian jalankan ulang dengan konfigurasi yang sama |
-| Hasil ekstrem                 | Nilai mAP jauh lebih rendah dibanding run lain              | Periksa kualitas dataset, seed, dan parameter; ulangi eksperimen jika diperlukan                |
-| Waktu eksekusi anomali        | FPS turun drastis karena CPU sedang digunakan aplikasi lain | Tutup aplikasi lain, ulangi pengujian, dan catat perubahan                                      |
-| Inkonsistensi dengan run lain | Precision berbeda jauh pada seed yang sama                  | Verifikasi konfigurasi, versi library, dan dataset; lakukan re-run apabila ditemukan perbedaan  |
+| Jenis Anomali                    | Contoh                                                                | Tindakan                                                                                                  |
+| -------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **False Positive**               | Batu atau objek diam di tepi jalan terdeteksi sebagai mobil           | Dicatat sebagai kesalahan deteksi (false positive) dan dianalisis sebagai keterbatasan model.             |
+| **False Negative**               | Kendaraan yang melintas tidak terdeteksi oleh model                   | Dicatat pada data log dan dibandingkan dengan hasil deteksi model lain.                                   |
+| **Waktu inferensi tidak stabil** | Waktu inferensi meningkat karena CPU sedang menjalankan aplikasi lain | Menutup aplikasi lain, mengulangi pengujian, dan mencatat perubahan pada data log.                        |
+| **Video bermasalah**             | Frame video rusak atau tidak terbaca pada bagian akhir video          | Mencatat peringatan (warning), memastikan hasil tetap tersimpan, dan mengulang pengujian jika diperlukan. |
+
 
 
 ---
@@ -168,10 +180,10 @@ Rencanakan bagaimana menangani anomali. Untuk setiap jenis, tentukan langkah yan
 > Pernahkah Anda melaporkan hasil riset/tugas dari single run? Apa risikonya? Bagaimana multiple run mengubah kepercayaan terhadap hasil?
 
 **Pengalaman sebelumnya:**
->Pada tugas atau proyek sebelumnya, hasil sering dilaporkan berdasarkan satu kali pengujian. Pendekatan tersebut berisiko menghasilkan kesimpulan yang kurang akurat karena tidak memperhitungkan variasi hasil akibat faktor acak maupun kondisi lingkungan pengujian.
+>Pada tugas atau proyek sebelumnya, hasil sering dilaporkan berdasarkan satu kali pengujian. Pendekatan tersebut berisiko menghasilkan kesimpulan yang kurang akurat karena tidak memperhitungkan variasi hasil akibat kondisi lingkungan maupun karakteristik data uji.
 
 **Yang akan dilakukan berbeda:**
->Pada penelitian ini, setiap model (YOLOv8 dan SSD) akan diuji sebanyak 20 kali dengan random seed yang telah ditentukan sehingga total terdapat 40 kali pengujian. Seluruh hasil akan dicatat dalam data log terstruktur dan dianalisis menggunakan metrik yang sama agar perbandingan kedua model lebih objektif, konsisten, dan dapat direproduksi.
+>Pada penelitian ini, model YOLOv8 dan YOLOv5 diuji menggunakan tiga video CCTV yang berbeda di Kabupaten Kebumen. Setiap video dijalankan sebanyak tiga kali dengan konfigurasi yang sama sehingga diperoleh 18 kali eksperimen. Seluruh hasil inferensi dicatat ke dalam file Excel dan CSV agar dapat dibandingkan berdasarkan waktu inferensi serta jumlah kendaraan yang berhasil dideteksi.
 ---
 
 ## Susunan yang Konsisten dengan WS-09
@@ -182,31 +194,33 @@ Untuk konsistensi dengan `WS-09: Implementation & Environment`, saya merapikan s
 
 ## Checklist Reproducibility (singkat)
 
-- [ ] Semua run terdokumentasi (Run ID, seed, config)
-- [ ] Output disimpan dalam format terstruktur (CSV/JSON/DB)
-- [ ] Versi kode tercatat (commit hash)
-- [ ] Anomali didokumentasikan, tidak dihapus
+- [x] Semua run terdokumentasi (Run ID, model, video, konfigurasi)
+- [x] Output disimpan dalam format CSV
+- [x] Versi kode tercatat melalui GitHub
+- [x] Anomali didokumentasikan pada data log
 
 ---
 
 ## Petunjuk Singkat Pengisian
-
-- **Execution Plan:** isi tabel dengan semua skenario dan seed sebelum mulai.
-- **Data Log:** gunakan satu format konsisten; rekomendasi: CSV untuk metrik + JSON untuk metadata.
-- **Anomaly Protocol:** catat penyebab, tindakan, dan apakah re-run diperlukan.
+- Execution Plan: mencatat seluruh kombinasi model, video uji, dan jumlah run yang akan dilakukan.
+- Data Log: menyimpan hasil inferensi setiap run dalam format CSV agar mudah dianalisis.
+- Anomaly Protocol: mendokumentasikan setiap kesalahan deteksi (false positive, false negative) maupun kendala selama proses inferensi.
 
 ---
 
 ## Contoh Ringkas (copyable)
 
 ```
-Run ID: run-2026-06-24-01
-Timestamp: 2026-06-24T14:05:00+07:00
-Skenario: BERT-base, DS-1
-Seed: 42
-Config: {"lr":2e-5, "epochs":10}
-Metrics: {"accuracy":0.843, "loss":0.512}
-Anomali: None
-Notes: Baseline run
+Run ID          : YOLOv8-DD-01
+Timestamp       : 2026-07-12T20:15:00+07:00
+Model           : YOLOv8
+Video           : depan_dprd.mp4
+Image Size      : 640
+Confidence      : 0.25
+Device          : CPU
+Inference Time  : 157.8 ms
+Output          : Video hasil deteksi dan data jumlah kendaraan
+Anomali         : False positive (batu di tepi jalan terdeteksi sebagai mobil)
+Catatan         : Hasil tetap digunakan untuk analisis performa model.
 ```
 
