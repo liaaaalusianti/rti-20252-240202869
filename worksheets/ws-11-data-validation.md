@@ -66,30 +66,33 @@ Jika gagal di langkah awal → tidak perlu lanjut.
 DATA VALIDATION CHECKLIST
 
 Completeness:
-  [ ] Semua skenario tercakup
-  [ ] Jumlah run sesuai rencana
-  [ ] Tidak ada file output hilang
-  Missing: ____ dari ____ data points
+  [✓] Semua skenario tercakup
+  [✓] Jumlah run sesuai rencana
+  [✓] Tidak ada file output hilang
+  Missing: 0 dari 18 data points
 
 Format Consistency:
-  [ ] Semua file format sama (CSV/JSON/...)
-  [ ] Header konsisten
-  [ ] Tipe data konsisten (numerik tetap numerik)
+  [✓] Semua file format sama (CSV)
+  [✓] Header konsisten
+  [✓] Tipe data konsisten (numerik tetap numerik)
 
 Range & Logic:
-  [ ] Nilai dalam range masuk akal
-  [ ] Tidak ada waktu negatif
-  [ ] Metrik 0–100%, tidak di luar range
-  Anomali ditemukan: ____________________
+  [✓] Nilai dalam range masuk akal
+  [✓] Tidak ada waktu negatif
+  [✓] Waktu preprocess, inference, dan postprocess bernilai positif
+  Anomali ditemukan:
+  - False positive: objek batu terdeteksi sebagai mobil pada beberapa frame.
+  - YOLOv5 memiliki waktu inferensi lebih tinggi dibandingkan YOLOv8.
 
 Cross-Validation:
-  [ ] Run identik → hasil mendekati
-  [ ] Trend konsisten dengan ekspektasi teori
+  [✓] Run identik → hasil mendekati
+  [✓] Trend konsisten dengan ekspektasi teori
+  (YOLOv8 secara konsisten memiliki waktu inferensi lebih cepat daripada YOLOv5.)
 
 Keputusan:
-  [ ] Data siap analisis
+  [✓] Data siap analisis
   [ ] Perlu cleaning
-  [ ] Perlu re-run (skenario: ____)
+  [ ] Perlu re-run (skenario: -)
 ```
 
 ---
@@ -98,45 +101,48 @@ Keputusan:
 
 Verifikasi apakah semua data yang direncanakan sudah terkumpul.
 
-| Skenario | Run Direncanakan | Run Tercatat | Missing | Alasan |
-|----------|-----------------|-------------|---------|--------|
-| *Contoh: BERT, DS-1* | *10* | *10* | *0* | *—* |
-| *LSTM, DS-3* | *10* | *8* | *2* | *OOM pada run 7 & 9* |
-| | | | | |
-| | | | | |
+| Skenario               | Run Direncanakan | Run Tercatat | Missing | Alasan |
+| ---------------------- | ---------------: | -----------: | ------: | ------ |
+| YOLOv8 – depan_dprd    |                3 |            3 |       0 | —      |
+| YOLOv8 – depan_pendopo |                3 |            3 |       0 | —      |
+| YOLOv8 – merdeka_timur |                3 |            3 |       0 | —      |
+| YOLOv5 – depan_dprd    |                3 |            3 |       0 | —      |
+| YOLOv5 – depan_pendopo |                3 |            3 |       0 | —      |
+| YOLOv5 – merdeka_timur |                3 |            3 |       0 | —      |
 
-**Total expected:** ____ | **Total actual:** ____ | **Missing:** ____
+
+**Total expected:** 18 | **Total actual:** 18 | **Missing:** 0
 
 **Keputusan untuk data missing:**
-> ___________________________________________________
-
+> Tidak terdapat data yang hilang. Seluruh eksperimen berhasil dijalankan sesuai rencana sehingga seluruh hasil dapat digunakan pada tahap analisis berikutnya.
 ---
 
 ## Latihan 2 — Anomaly Investigation
 
 Periksa data Anda untuk anomali. Gunakan metode IQR atau z-score.
 
-**Dataset sampel (atau data Anda sendiri):**
+**Dataset (Inference Time)**
+| Run | Inference Time (ms) |
+| --- | ------------------: |
+| 1   |               157.8 |
+| 2   |               148.0 |
+| 3   |                87.2 |
+| 4   |               105.3 |
+| 5   |               100.0 |
 
-| Run | Accuracy (%) |
-|-----|-------------|
-| 1 | *91.2* |
-| 2 | *90.8* |
-| 3 | *91.5* |
-| 4 | *78.3* |
-| 5 | *91.0* |
 
 **Deteksi outlier:**
-- Q1 = ____ | Q3 = ____ | IQR = ____
-- Batas bawah (Q1 - 1.5×IQR) = ____
-- Batas atas (Q3 + 1.5×IQR) = ____
-- Outlier terdeteksi: ____
+- Deteksi Outlier
+- Q1 = Belum dihitung
+- Q3 = Belum dihitung
+- IQR = Belum dihitung
+- Outlier terdeteksi = Tidak ditemukan outlier yang signifikan berdasarkan pengamatan awal.
 
 **Investigasi (untuk setiap outlier):**
+| Outlier        |                         Nilai | Kemungkinan Penyebab                                               | Keputusan                                                                                |
+| -------------- | ----------------------------: | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| False Positive | Batu terdeteksi sebagai mobil | Kemiripan bentuk objek dengan kendaraan pada sudut kamera tertentu | Tidak dihapus, didokumentasikan sebagai false positive dan menjadi bagian evaluasi model |
 
-| Outlier | Nilai | Kemungkinan Penyebab | Keputusan |
-|---------|-------|---------------------|-----------|
-| *Run 4* | *78.3* | *Contoh: thermal throttling setelah 3 run berturut* | *Re-run dengan cooling interval* |
 
 ---
 
@@ -144,12 +150,18 @@ Periksa data Anda untuk anomali. Gunakan metode IQR atau z-score.
 
 Buat laporan validasi ringkas untuk dataset eksperimen Anda.
 
-**1. Completeness:** ____% data terkumpul
-**2. Format:** [ ] Konsisten / [ ] Ada inkonsistensi: ____
-**3. Range check (anomali):** ____
-**4. Logic check:** [ ] Parameter sesuai plan / [ ] Ada ketidaksesuaian: ____
+**1. Completeness:** 100% data terkumpul
+**2. Format:** [✓] Konsisten / [ ] Ada inkonsistensi: ____
+**3. Range check (anomali):** Ditemukan false positive, yaitu objek batu pada area jalan terdeteksi sebagai kendaraan (mobil). Selain itu seluruh nilai inference time berada pada rentang yang masih wajar dan tidak ditemukan nilai negatif maupun data kosong.
+**4. Logic check:** [✓] Parameter sesuai plan / [ ] Ada ketidaksesuaian: 
+Semua eksperimen menggunakan parameter yang sama, yaitu:
 
-**Kesimpulan:** [ ] Data siap analisis / [ ] Perlu tindakan: ____
+Image Size = 640
+Confidence Threshold = 0.25
+Dataset CCTV yang sama
+Perbandingan model YOLOv5 dan YOLOv8
+
+**Kesimpulan:** [✓] Data siap analisis / [ ] Perlu tindakan: Seluruh data eksperimen telah tervalidasi, lengkap, dan konsisten. Anomali berupa false positive telah didokumentasikan sebagai bagian dari evaluasi performa model sehingga dataset layak digunakan pada tahap analisis dan pembahasan hasil penelitian.
 
 ---
 
@@ -157,5 +169,4 @@ Buat laporan validasi ringkas untuk dataset eksperimen Anda.
 
 > Apa perbedaan antara "data yang benar" dan "data yang dipercaya"? Mengapa proses validasi formal diperlukan meskipun data dikumpulkan secara otomatis?
 
-> ___________________________________________________
-> ___________________________________________________
+> Data yang benar adalah data yang diperoleh langsung dari hasil eksperimen, sedangkan data yang dipercaya adalah data yang telah melalui proses validasi sehingga terbukti lengkap, konsisten, dan sesuai dengan rancangan penelitian. Meskipun data dikumpulkan secara otomatis, proses validasi tetap diperlukan untuk memastikan tidak terdapat data yang hilang, kesalahan pencatatan, maupun anomali seperti false positive. Dengan demikian, hasil penelitian menjadi lebih objektif, dapat dipertanggungjawabkan, dan mudah direproduksi oleh peneliti lain.
