@@ -1,4 +1,4 @@
-# Tahap 2 — Implementasi API Gateway (Go)
+# Tahap 2 — Implementasi Sistem Deteksi Kendaraan
 
 **Status:** Selesai
 **Acuan arsitektur:** [tahap-1-arsitektur-dan-skema-database.md](tahap-1-arsitektur-dan-skema-database.md)
