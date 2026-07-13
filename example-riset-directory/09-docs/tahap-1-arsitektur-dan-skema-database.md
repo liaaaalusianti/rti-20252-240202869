@@ -6,94 +6,110 @@
 
 ## 1. Komponen Sistem
 
-1. **API Gateway (Go, Echo)** — menerima request, mem-parsing header JWT untuk mengambil `kid`, lalu meresolusi JWK terkait sebelum verifikasi signature.
-2. **Redis (L1 Cache, murni cache JWKS)**
-   - *Positive cache*: `jwks:kid:<kid>` → JWK (TTL pendek, mis. 5 menit) untuk kunci valid.
-   - *Negative cache*: `jwks:negative:<kid>` → marker (TTL pendek, mis. 60 detik) untuk `kid` yang tidak ditemukan — inti mitigasi flooding.
-   - Tidak menyimpan state rate-limit (lihat poin 3).
-3. **PostgreSQL (L2 / Source of Truth + Rate Limit Counter Permanen)** — menyimpan metadata kunci signing (`signing_keys`) dan counter rate-limit permanen (`rate_limit_counters`).
+Sistem deteksi kendaraan yang dikembangkan terdiri atas beberapa komponen utama sebagai berikut.
 
-## 2. Alur Resolusi Kunci (Mitigasi)
+1. Input Video
+   - Berupa tiga video CCTV lalu lintas Kabupaten Kebumen:
+      - depan_dprd.mp4
+      - depan_pendopo.mp4
+      - merdeka_timur.mp4
+2. Preprocessing
+   - Membaca setiap frame video menggunakan OpenCV.
+   - Mengubah frame menjadi ukuran input 640 × 640 piksel sesuai kebutuhan model YOLO.
+3. Model Deteksi Objek
+   - YOLOv8 sebagai metode utama.
+   - YOLOv5 sebagai metode pembanding (baseline).
+4. Output Deteksi
+   - Bounding box kendaraan.
+   - Label kelas kendaraan.
+   - Confidence score hasil deteksi.
+5. Performance Logger
+   - Mencatat waktu:
+      - Preprocess
+      - Inference
+      - Postprocess
+   - Data disimpan ke dalam file CSV untuk analisis.
+
+## 2. Alur Sistem
 
 ```
-Request masuk → Gateway parsing header JWT → ambil `kid`
-  │
-  ├─ Cek Redis positive cache (jwks:kid:<kid>)
-  │     ├─ HIT  → verifikasi signature → lanjut
-  │     └─ MISS ↓
-  │
-  ├─ Cek Redis negative cache (jwks:negative:<kid>)
-  │     ├─ HIT  → tolak langsung (401), tanpa query DB
-  │     └─ MISS ↓
-  │
-  ├─ UPSERT & cek rate_limit_counters di PostgreSQL (atomic, per client_ip + window)
-  │     ├─ EXCEEDED → tolak (429) + set Redis negative cache
-  │     └─ OK ↓
-  │
-  └─ Query PostgreSQL (signing_keys WHERE kid = ? AND is_active)
-        ├─ FOUND     → isi Redis positive cache → verifikasi signature
-        └─ NOT FOUND → set Redis negative cache → tolak (401)
+Video CCTV
+      │
+      ▼
+Membaca Frame Video
+      │
+      ▼
+Preprocessing
+(Resize 640 × 640)
+      │
+      ▼
+YOLOv8 / YOLOv5
+(Object Detection)
+      │
+      ▼
+Bounding Box + Label
+      │
+      ▼
+Performance Logger
+      │
+      ▼
+CSV Hasil Pengujian
+
 ```
 
-Catatan: pada mode `CACHE_MODE=none` (baseline), langkah cek Redis dan rate-limit dilewati — setiap request langsung query `signing_keys` di PostgreSQL, mensimulasikan gateway tanpa mitigasi.
+Catatan: Seluruh proses dilakukan menggunakan parameter yang sama agar perbandingan antara YOLOv8 dan YOLOv5 bersifat fair comparison.
 
-Mekanisme **fail-closed**: jika Redis tidak dapat diakses, gateway tetap melanjutkan ke PostgreSQL (rate-limit counter tetap berfungsi karena bersumber dari PostgreSQL); jika PostgreSQL tidak dapat diakses, request ditolak (bukan diloloskan tanpa verifikasi).
+## 3. Dataset Penelitian
+Dataset yang digunakan terdiri atas tiga video CCTV lalu lintas Kabupaten Kebumen.
 
-## 3. Skema Database (PostgreSQL)
+| Nama Video        | Lokasi                                |
+| ----------------- | ------------------------------------- |
+| depan_dprd.mp4    | Depan DPRD Kabupaten Kebumen          |
+| depan_pendopo.mp4 | Depan Pendopo Kabupaten Kebumen       |
+| merdeka_timur.mp4 | Jalan Merdeka Timur Kabupaten Kebumen |
 
-```sql
-CREATE TABLE signing_keys (
-    kid             VARCHAR(255) PRIMARY KEY,
-    kty             VARCHAR(10)  NOT NULL DEFAULT 'RSA',
-    alg             VARCHAR(10)  NOT NULL DEFAULT 'RS256',
-    use_type        VARCHAR(10)  NOT NULL DEFAULT 'sig',
-    n               TEXT         NOT NULL,   -- modulus, base64url
-    e               TEXT         NOT NULL,   -- exponent, base64url
-    is_active       BOOLEAN      NOT NULL DEFAULT TRUE,
-    created_at      TIMESTAMPTZ  NOT NULL DEFAULT now(),
-    expires_at      TIMESTAMPTZ,
-    revoked_at      TIMESTAMPTZ
-);
+Ketiga video digunakan pada kedua model sehingga tidak terdapat perbedaan dataset selama eksperimen.
 
-CREATE INDEX idx_signing_keys_active ON signing_keys (kid) WHERE is_active = TRUE;
+## 4. Parameter Pengujian
 
--- Counter rate-limit permanen (source of truth di PostgreSQL)
-CREATE TABLE rate_limit_counters (
-    client_ip       INET        NOT NULL,
-    window_start    TIMESTAMPTZ NOT NULL,
-    request_count   INTEGER     NOT NULL DEFAULT 0,
-    blocked_count   INTEGER     NOT NULL DEFAULT 0,
-    PRIMARY KEY (client_ip, window_start)
-);
-```
+| Parameter            | Nilai           |
+| -------------------- | --------------- |
+| Image Size           | 640 × 640       |
+| Confidence Threshold | 0.25            |
+| Device               | CPU             |
+| Framework            | Python          |
+| Library              | OpenCV          |
+| Model                | YOLOv8 & YOLOv5 |
 
-Upsert atomik untuk increment counter per request (window tetap, mis. 1 detik):
 
-```sql
-INSERT INTO rate_limit_counters (client_ip, window_start, request_count)
-VALUES ($1, $2, 1)
-ON CONFLICT (client_ip, window_start)
-DO UPDATE SET request_count = rate_limit_counters.request_count + 1
-RETURNING request_count;
-```
+## 5. Skenario Eksperimen
 
-Jika `request_count` melebihi ambang batas, request ditolak dan `blocked_count` di-increment pada baris yang sama. Data ini bersifat permanen (tidak di-TTL) sehingga dapat dipakai langsung untuk analisis pola serangan pada Tahap 4.
+Eksperimen dilakukan menggunakan dua model deteksi objek.
 
-Tabel log lookup tambahan (untuk cache hit/miss ratio) akan ditentukan pada Tahap 2 setelah skenario k6 lebih jelas.
+| Model  | Video         | Jumlah Run |
+| ------ | ------------- | ---------- |
+| YOLOv8 | depan_dprd    | 3          |
+| YOLOv8 | depan_pendopo | 3          |
+| YOLOv8 | merdeka_timur | 3          |
+| YOLOv5 | depan_dprd    | 3          |
+| YOLOv5 | depan_pendopo | 3          |
+| YOLOv5 | merdeka_timur | 3          |
 
-## 4. Skema Redis (Murni L1 Cache JWKS)
+Total eksperimen yang dilakukan adalah 18 run.
 
-| Key Pattern | Tipe | TTL | Tujuan |
-|---|---|---|---|
-| `jwks:kid:<kid>` | STRING (JSON JWK) | ~300s | Cache positif untuk kunci valid |
-| `jwks:negative:<kid>` | STRING (`"1"`) | ~60s | Cache negatif untuk `kid` tak dikenal |
+## 6. Metrik Evaluasi
+Penelitian mengevaluasi performa model menggunakan metrik berikut.
 
-## 5. Keputusan Teknis (Final)
+| Metrik              | Keterangan                                            |
+| ------------------- | ----------------------------------------------------- |
+| Preprocess Time     | Waktu persiapan frame sebelum deteksi (ms)            |
+| Inference Time      | Waktu proses deteksi objek oleh model (ms)            |
+| Postprocess Time    | Waktu pemrosesan hasil deteksi (ms)                   |
+| Total Pipeline Time | Total waktu preprocess + inference + postprocess (ms) |
 
-1. **Mode eksperimen**: satu binary gateway dengan toggle `CACHE_MODE=none|hybrid` — `none` = baseline tanpa cache/rate-limit, `hybrid` = arsitektur mitigasi penuh. Memastikan perbandingan baseline vs mitigated apple-to-apple untuk perhitungan $D_{perf}$.
-2. **Framework Gateway**: **Echo** (Go web framework).
-3. **Rate limiting**: counter permanen di **PostgreSQL** (`rate_limit_counters`, atomic UPSERT per `client_ip` + window). **Redis murni sebagai L1 cache JWKS** (positive & negative cache), tidak menyimpan state rate-limit.
-4. **Identity Service**: **PostgreSQL `signing_keys` langsung sebagai backing store** — tidak ada microservice tambahan; fokus eksperimen pada lapisan caching/rate-limit di Gateway.
-5. **Redis client**: `go-redis/redis/v9` (default standar Go ekosistem).
-6. **PostgreSQL driver**: `pgx` (native driver, performa baik, mendukung connection pooling via `pgxpool`).
-7. **Skenario issuer**: single issuer (disederhanakan) — dapat diperluas ke multi-issuer di penelitian lanjutan jika diperlukan.
+## 7. Keputusan Teknis (Final)
+1. Menggunakan YOLOv8 sebagai metode utama dan YOLOv5 sebagai baseline.
+2. Seluruh eksperimen menggunakan dataset CCTV yang sama.
+3. Parameter pengujian dibuat identik (image size, confidence threshold, device, dan environment) untuk memastikan perbandingan yang adil.
+4. Setiap kombinasi model dan video diuji sebanyak 3 kali, sehingga diperoleh 18 data eksperimen.
+5. Hasil eksperimen direkam ke dalam file CSV, kemudian dihitung nilai mean, standar deviasi, dan total pipeline time sebagai dasar analisis performa.
