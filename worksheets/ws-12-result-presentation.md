@@ -65,25 +65,31 @@ Keduanya **saling melengkapi**:
 ```
 RESULT PRESENTATION PLAN
 
-Research Question : ____________________
-Metrik Utama      : ____________________
+Research Question :
+Bagaimana perbandingan performa YOLOv8 dan YOLOv5 dalam mendeteksi kendaraan pada rekaman CCTV di Kabupaten Kebumen berdasarkan waktu preprocess, inference, dan postprocess?
+
+Metrik Utama :
+Preprocess Time (ms), Inference Time (ms), dan Postprocess/NMS Time (ms)
 
 Tabel Hasil:
-| Skenario | Metrik 1 (mean ± std) | Metrik 2 (mean ± std) | n |
-|----------|----------------------|----------------------|---|
-|          |                      |                      |   |
+| Model  | Preprocess (Mean ± SD) | Inference (Mean ± SD) | Postprocess (Mean ± SD) |  n |
+| ------ | ---------------------: | --------------------: | ----------------------: | -: |
+| YOLOv8 |     **3.27 ± 0.63 ms** | **106.07 ± 28.08 ms** |      **1.28 ± 0.25 ms** |  9 |
+| YOLOv5 |     **1.14 ± 0.28 ms** | **219.84 ± 35.50 ms** |      **1.21 ± 0.15 ms** |  9 |
 
 Visualisasi yang Direncanakan:
-| # | Jenis Grafik | Pesan Utama | Metrik |
-|---|-------------|-------------|--------|
-| 1 |             |             |        |
-| 2 |             |             |        |
+| No | Jenis Grafik | Pesan Utama                                                 | Metrik                |
+| -- | ------------ | ----------------------------------------------------------- | --------------------- |
+| 1  | Bar Chart    | Membandingkan rata-rata waktu preprocess YOLOv8 dan YOLOv5  | Mean Preprocess Time  |
+| 2  | Bar Chart    | Membandingkan rata-rata waktu inference YOLOv8 dan YOLOv5   | Mean Inference Time   |
+| 3  | Bar Chart    | Membandingkan rata-rata waktu postprocess YOLOv8 dan YOLOv5 | Mean Postprocess Time |
+
 
 Bias Check:
-  [ ] Y-axis mulai dari 0 (atau dijustifikasi)
-  [ ] Error bar/CI ditampilkan
-  [ ] Semua data disertakan (tidak cherry-picked)
-  [ ] Tidak menggunakan 3D tanpa alasan
+[x] Y-axis dimulai dari 0
+[x] Error bar (Standar Deviasi) ditampilkan
+[x] Seluruh data eksperimen ditampilkan
+[x] Tidak menggunakan grafik 3D
 ```
 
 ---
@@ -92,17 +98,17 @@ Bias Check:
 
 Buat tabel hasil eksperimen Anda (boleh dengan data simulasi jika belum punya data riil).
 
-| Skenario | Metrik 1 (mean ± std) | Metrik 2 (mean ± std) | n |
-|----------|----------------------|----------------------|---|
-| *Contoh: BERT-base* | *88.4 ± 1.2%* | *45.2 ± 3.1 min* | *10* |
-| | | | |
-| | | | |
+| Model  | Preprocess (Mean ± SD) | Inference (Mean ± SD) | Postprocess (Mean ± SD) |  n |
+| ------ | ---------------------: | --------------------: | ----------------------: | -: |
+| YOLOv8 |     **3.27 ± 0.63 ms** | **106.07 ± 28.08 ms** |      **1.28 ± 0.25 ms** |  9 |
+| YOLOv5 |     **1.14 ± 0.28 ms** | **219.84 ± 35.50 ms** |      **1.21 ± 0.15 ms** |  9 |
+
 
 **Checklist tabel:**
-- [ ] Self-contained (judul jelas, satuan ada, N tercantum)
-- [ ] Mean ± std (bukan single number)
-- [ ] Diurutkan berdasarkan metrik utama
-- [ ] Format konsisten di semua baris
+- [x] Self-contained (judul jelas, satuan ada, N tercantum)
+- [x] Mean ± SD digunakan
+- [x] Diurutkan berdasarkan metrik utama (Inference Time)
+- [x] Format tabel konsisten
 
 ---
 
@@ -110,36 +116,33 @@ Buat tabel hasil eksperimen Anda (boleh dengan data simulasi jika belum punya da
 
 Rencanakan 2-3 grafik untuk menyajikan data dari Latihan 1. Setiap grafik = satu pesan.
 
-| # | Jenis Grafik | Pesan | Data yang Digunakan |
-|---|-------------|-------|---------------------|
-| 1 | *Contoh: Bar chart + error bar* | *Perbandingan accuracy antar 3 model* | *Mean accuracy ± std* |
-| 2 | *Box plot* | *Distribusi F1 per model* | *Semua run F1* |
-| 3 | *Scatter plot* | *Trade-off accuracy vs training time* | *Mean accuracy vs mean time* |
+| No | Jenis Grafik | Pesan                                                                  | Data                  |
+| -- | ------------ | ---------------------------------------------------------------------- | --------------------- |
+| 1  | Bar Chart    | YOLOv8 memiliki waktu preprocess sedikit lebih tinggi dibanding YOLOv5 | Mean Preprocess Time  |
+| 2  | Bar Chart    | YOLOv8 memiliki waktu inference jauh lebih cepat dibanding YOLOv5      | Mean Inference Time   |
+| 3  | Bar Chart    | Waktu postprocess kedua model relatif sama                             | Mean Postprocess Time |
+
+Grafik yang telah dibuat pada penelitian ini berupa grafik batang (bar chart) untuk membandingkan nilai rata-rata preprocess, inference, dan postprocess antara YOLOv8 dan YOLOv5.
 
 ---
 
 ## Latihan 3 — Bias Detection
 
-Evaluasi visualisasi berikut untuk bias (skenario dari contoh):
+| Pertanyaan                        | Jawaban                                                                                                                 |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Apakah Y-axis menyesatkan?        | Tidak. Grafik menggunakan sumbu Y yang dimulai dari nol sehingga perbedaan antar model ditampilkan secara proporsional. |
+| Apakah error bar ditampilkan?     | Ya. Error bar menggunakan standar deviasi untuk menunjukkan variasi hasil dari setiap model.                            |
+| Apakah semua kondisi ditampilkan? | Ya. Seluruh hasil pengujian pada tiga video CCTV dan sembilan run untuk setiap model digunakan dalam perhitungan.       |
+| Apa solusinya?                    | Menggunakan skala sumbu yang konsisten, menampilkan seluruh data eksperimen, serta menambahkan error bar pada grafik.   |
 
-**Skenario:** Metode A = 91.2%, Metode B = 90.8%. Bar chart dengan Y-axis mulai dari 90%.
-
-| Pertanyaan | Jawaban |
-|-----------|---------|
-| Apakah Y-axis menyesatkan? | *Contoh: Ya — A terlihat 2× B padahal beda 0.4%* |
-| Apakah error bar ditampilkan? | |
-| Apakah semua kondisi ditampilkan? | |
-| Apa solusinya? | |
 
 **Evaluasi grafik Anda sendiri dari Latihan 2:**
-- [ ] Semua bias check lulus
-- [ ] Ada yang perlu diperbaiki: ____
-
+- [x] Semua bias check lulus
+- [ ] Ada yang perlu diperbaiki: Tidak ada
 ---
 
 ## Refleksi
 
 > Mengapa tabel dan grafik keduanya diperlukan — tidak cukup salah satu saja? Pernahkah Anda membuat grafik yang (tanpa sengaja) menyesatkan?
 
-> ___________________________________________________
-> ___________________________________________________
+> Tabel dan grafik memiliki fungsi yang saling melengkapi. Tabel memberikan informasi numerik secara rinci dan presisi sehingga memudahkan pembaca melihat nilai rata-rata serta standar deviasi setiap metrik. Sementara itu, grafik membantu memperlihatkan pola dan perbedaan performa antar model secara visual sehingga interpretasi hasil menjadi lebih mudah. Pada penelitian ini, grafik disusun menggunakan skala yang konsisten, dimulai dari nol, dan menampilkan seluruh hasil eksperimen sehingga dapat mengurangi potensi bias dalam penyajian data.
