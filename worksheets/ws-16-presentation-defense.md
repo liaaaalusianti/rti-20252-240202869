@@ -113,15 +113,7 @@ Anticipatory Defense Matrix:
 | Generalization | Apakah hasil ini dapat diterapkan di kota lain? | **Claim:** Dapat diterapkan dengan penyesuaian. **Evidence:** Model menggunakan dataset CCTV umum dan framework YOLO yang bersifat universal. **Reasoning:** Perlu validasi menggunakan dataset dari daerah lain untuk memastikan kemampuan generalisasi.                                                                                         |
 
 
-Latihan:
-Latihan 1: Simulasi presentasi mandiri
-Catatan: Mengukur durasi presentasi dan memperbaiki alur penyampaian.
 
-Latihan 2: Simulasi dengan teman
-Catatan: Menerima masukan mengenai kejelasan metode dan hasil penelitian.
-
-Latihan 3: Gladi bersih
-Catatan: Presentasi berjalan sesuai waktu, materi sudah siap, dan mampu menjawab pertanyaan utama.
 
 
 ---
