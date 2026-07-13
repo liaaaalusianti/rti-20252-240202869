@@ -8,32 +8,110 @@
 
 ## Tujuan
 
-Mengimplementasikan API Gateway (Go + Echo) yang mendukung dua mode operasi melalui `CACHE_MODE`:
-
-- `none` — baseline, setiap request langsung query `signing_keys` di PostgreSQL.
-- `hybrid` — mitigasi penuh: Redis L1 cache (positive/negative) + rate-limit counter permanen di PostgreSQL.
+Mengimplementasikan sistem deteksi kendaraan menggunakan dua model deep learning, yaitu YOLOv8 sebagai metode utama dan YOLOv5 sebagai metode pembanding (baseline). Implementasi dilakukan menggunakan Python dengan framework Ultralytics YOLO dan OpenCV untuk memproses rekaman CCTV Kabupaten Kebumen.
 
 ## Deliverable
 
-- [x] Struktur project Go (`cmd/gateway`, `internal/...`) — DDD-lite per bounded-context (`jwks`, `ratelimit`, `jwtauth`, `httpapi`, `platform`, `metrics`)
-- [x] `docker-compose.yml` (gateway, postgres, redis) dengan healthcheck & `depends_on: condition: service_healthy`
-- [x] Migration SQL via Sqitch (`signing_keys`, `rate_limit_counters`, `upsert_rate_limit_counter` function)
-- [x] Skrip seed (`scripts/seed`): generate RSA-2048 keypair, insert ke `signing_keys`, cetak contoh JWT valid (exp +24h)
-- [x] Middleware verifikasi JWT (RS256) + resolusi `kid` (mode `none` dan `hybrid`, fail-closed pada Postgres down, fail-open pada Redis down)
-- [x] Endpoint `/metrics` (Prometheus, prefix `jwksgw_`): cache hit/miss, db query count, rate-limit blocked count, auth outcome, request duration
-- [x] Konfigurasi via environment variable (`.env.example`)
-- [x] `/healthz` (dipakai healthcheck compose & runner Tahap 3)
-- [x] `README.md` dengan command mentah (sqitch deploy, seed, run, docker compose, switch `CACHE_MODE`)
+ - [X] Implementasi model YOLOv8 untuk deteksi kendaraan.
+ - [X] Implementasi model YOLOv5 sebagai metode pembanding.
+ - [X] Modul pembacaan video menggunakan OpenCV.
+ - [X] Modul preprocessing frame video (resize 640 × 640 piksel).
+ - [X] Modul deteksi kendaraan secara otomatis.
+ - [X] Modul pencatatan waktu preprocess, inference, dan postprocess.
+ - [X] Penyimpanan hasil pengujian dalam format CSV.
+ - [X] Dokumentasi kebutuhan perangkat lunak (requirements.txt).
+ - [X] Struktur folder penelitian yang memisahkan dataset, source code, hasil eksperimen, dan visualisasi.
 
-## Hasil Verifikasi End-to-End
+## Struktur Implementasi
 
-Diverifikasi manual via `docker compose` + curl (lihat [../05-kode/gateway/README.md](../05-kode/gateway/README.md) bagian "Verifikasi end-to-end"):
+```
+Dataset CCTV
+        │
+        ▼
+Video Reader (OpenCV)
+        │
+        ▼
+Frame Preprocessing
+(Resize 640×640)
+        │
+        ▼
+YOLOv8 / YOLOv5
+Object Detection
+        │
+        ▼
+Vehicle Detection
+(Bounding Box + Label)
+        │
+        ▼
+Performance Logger
+        │
+        ▼
+CSV Results
 
-- **Hybrid**: valid kid → 200 (cache miss → DB → fill cache) → 200 (cache hit); unknown kid → 401 `invalid_kid` (negative cache) tanpa query DB berulang; flood concurrent dengan `kid` unik → sebagian `429 rate_limited` setelah >20 req/s per `client_ip`.
-- **None**: valid kid selalu 200 dengan `jwksgw_db_queries_total{resolve_key}` naik 1:1 per request; tidak pernah `429`.
-- **Fail-closed**: Postgres down → `503 service_unavailable` (kedua mode). Redis down (hybrid) → kid yang sudah ter-cache tetap `200` (fallback Postgres), `/healthz` melaporkan `redis:false`.
+```
+## Hasil Implementasi
+Implementasi berhasil dijalankan menggunakan Python dengan library Ultralytics YOLO, OpenCV, NumPy, dan Pandas. Sistem mampu membaca ketiga video CCTV yang digunakan sebagai dataset penelitian kemudian melakukan proses deteksi kendaraan secara otomatis menggunakan model YOLOv8 maupun YOLOv5.
 
-## Catatan Lingkungan
+Output yang dihasilkan meliputi:
 
-- PostgreSQL container di-expose ke host pada port **5433** (bukan 5432) untuk menghindari konflik dengan instance PostgreSQL lokal di mesin development. Di dalam jaringan Docker, gateway tetap mengakses `postgres:5432`.
-- Sqitch project (`migrations/`) adalah dokumentasi migrasi resmi (deploy/revert/verify), namun di mesin development saat ini `sqitch` CLI tidak punya driver `DBD::Pg` — migrasi diverifikasi dengan menjalankan file `deploy/*.sql` langsung via `psql`. Pastikan environment dengan `DBD::Pg` terpasang untuk `sqitch deploy` penuh.
+- Bounding box kendaraan.
+- Label objek kendaraan.
+- Nilai confidence setiap deteksi.
+- Waktu preprocessing.
+- Waktu inference.
+- Waktu postprocessing.
+- File CSV hasil pengujian.
+- Video hasil deteksi.
+
+## Hasil Verifikasi
+Verifikasi implementasi dilakukan dengan menjalankan kedua model pada tiga video CCTV Kabupaten Kebumen.
+
+Hasil pengujian menunjukkan bahwa:
+
+- YOLOv8 berhasil melakukan deteksi kendaraan pada seluruh video pengujian.
+- YOLOv5 juga berhasil mendeteksi kendaraan pada seluruh video sebagai model pembanding.
+- Sistem berhasil mencatat waktu preprocess, inference, dan postprocess untuk setiap proses deteksi.
+- Seluruh hasil eksperimen berhasil disimpan dalam file yolo_results.csv yang kemudian digunakan pada tahap analisis data dan visualisasi hasil penelitian.
+
+## Konfigurasi Lingkungan
+
+| Komponen             | Spesifikasi           |
+| -------------------- | --------------------- |
+| Bahasa Pemrograman   | Python 3.11           |
+| Framework            | Ultralytics YOLO      |
+| Library              | OpenCV, NumPy, Pandas |
+| Model                | YOLOv8 dan YOLOv5     |
+| Device               | CPU                   |
+| Image Size           | 640 × 640             |
+| Confidence Threshold | 0.25                  |
+| Format Output        | CSV                   |
+
+## Dataset 
+
+| No | Nama Dataset      |
+| -- | ----------------- |
+| 1  | depan_dprd.mp4    |
+| 2  | depan_pendopo.mp4 |
+| 3  | merdeka_timur.mp4 |
+
+Masing-masing video diuji menggunakan YOLOv8 dan YOLOv5 sebanyak 3 kali, sehingga diperoleh 18 kali eksperimen.
+
+## Struktur Folder Implementasi
+```
+05-kode/
+│
+├── yolo_v8.py
+├── yolo_v5.py
+├── requirements.txt
+├── utils.py
+└── README.md
+```
+
+## Catatan Implementasi
+1. Seluruh eksperimen dijalankan menggunakan konfigurasi perangkat keras dan perangkat lunak yang sama untuk menjaga konsistensi hasil pengujian.
+2. Kedua model menggunakan parameter inferensi yang identik sehingga perbandingan performa dilakukan secara adil (fair comparison).
+3. Dataset yang digunakan berupa tiga rekaman CCTV Kabupaten Kebumen dengan kondisi lalu lintas yang berbeda.
+4. Hasil pengujian disimpan dalam format CSV sehingga dapat digunakan pada Tahap 3 (Eksekusi Eksperimen), Tahap 4 
+(Analisis Data), serta Tahap 5 (Penyusunan Laporan Penelitian).
+
+
