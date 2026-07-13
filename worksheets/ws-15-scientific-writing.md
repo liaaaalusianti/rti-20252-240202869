@@ -79,34 +79,33 @@ Metrik-X     ✗      ✗       ✓ ←     ✗        ✗
 
 ---
 
-## Template A.15 — Paper Structure Checklist
+## A.15 — Paper Structure Checklist
 
-```
 PAPER STRUCTURE CHECKLIST
 
-Title   : ____________________
-Target  : [ ] Jurnal  [ ] Konferensi  [ ] Laporan
+Title   : Perbandingan YOLOv8 dan YOLOv5 dalam Deteksi Kendaraan pada Rekaman CCTV untuk Mendukung Smart City di Kabupaten Kebumen
+Target  : [ ] Jurnal  [ ] Konferensi  [✓] Laporan
 
 Section Check:
-  [ ] Abstract — masalah, metode, hasil utama, kontribusi (max 250 kata)
-  [ ] Introduction — konteks → gap → RQ → kontribusi → struktur paper
-  [ ] Related Work — concept-centric, gap positioning
-  [ ] Method — reproducible: desain, variabel, metrik, setup, prosedur
-  [ ] Results — tabel + grafik + observasi (tanpa interpretasi)
-  [ ] Discussion — interpretasi, perbandingan, implikasi, limitation
-  [ ] Conclusion — jawaban RQ, kontribusi, future work
+  [✓] Abstract — masalah, metode, hasil utama, kontribusi (max 250 kata)
+  [✓] Introduction — konteks → gap → RQ → kontribusi → struktur paper
+  [✓] Related Work — concept-centric, gap positioning
+  [✓] Method — reproducible: desain, variabel, metrik, setup, prosedur
+  [✓] Results — tabel + grafik + observasi (tanpa interpretasi)
+  [✓] Discussion — interpretasi, perbandingan, implikasi, limitation
+  [✓] Conclusion — jawaban RQ, kontribusi, future work
 
 Consistency Matrix:
-  [ ] RQ di Introduction = RQ di Method = RQ di Conclusion
-  [ ] Variabel di Method = variabel di Results
-  [ ] Klaim di Discussion didukung data di Results
-  [ ] Limitasi di Discussion di-address di Conclusion/Future Work
+  [✓] RQ di Introduction = RQ di Method = RQ di Conclusion
+  [✓] Variabel di Method = variabel di Results
+  [✓] Klaim di Discussion didukung data di Results
+  [✓] Limitasi di Discussion di-address di Conclusion/Future Work
 
 Writing Quality:
-  [ ] Clarity — mudah dipahami tanpa re-read
-  [ ] Precision — tidak ada istilah ambigu
-  [ ] Conciseness — tidak ada kalimat redundan
-```
+  [✓] Clarity — mudah dipahami tanpa re-read
+  [✓] Precision — tidak ada istilah ambigu
+  [✓] Conciseness — tidak ada kalimat redundan
+
 
 ---
 
@@ -114,15 +113,15 @@ Writing Quality:
 
 Buat outline paper untuk riset Anda menggunakan struktur IMRAD.
 
-| Section | Konten Utama (2-3 kalimat) | Target Kata |
-|---------|---------------------------|------------|
-| Abstract | *Contoh: Sistem rekomendasi memiliki akurasi tinggi tapi satisfaction rendah. Studi ini menguji CF+context signal. Hasil: satisfaction naik 38% tanpa penurunan RMSE signifikan.* | 200-250 |
-| Introduction | *Contoh: Konteks: gap antara akurasi dan kepuasan pengguna. Gap: tidak ada studi yang mengkombinasikan CF+context. RQ: apakah CF+context meningkatkan satisfaction?* | 500-700 |
-| Related Work | | 700-1000 |
-| Method | | 800-1200 |
-| Results | | 500-800 |
-| Discussion | | 600-900 |
-| Conclusion | | 200-400 |
+| Section          | Konten Utama                                                                                                                                                                                                                                                                                                                                                                        | Target Kata |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| **Abstract**     | Penelitian membandingkan performa YOLOv8 dan YOLOv5 dalam mendeteksi kendaraan pada rekaman CCTV di Kabupaten Kebumen. Pengujian dilakukan menggunakan tiga video CCTV dengan masing-masing tiga kali pengujian pada setiap model. Hasil menunjukkan bahwa YOLOv8 memiliki waktu inference lebih cepat dibandingkan YOLOv5 sehingga lebih sesuai untuk implementasi smart mobility. | 200–250     |
+| **Introduction** | Menjelaskan konsep Smart City dan Smart Mobility, pentingnya deteksi kendaraan otomatis menggunakan CCTV, keterbatasan penelitian sebelumnya, research gap, Research Question, hipotesis, dan kontribusi penelitian.                                                                                                                                                                | 500–700     |
+| **Related Work** | Membahas penelitian terdahulu mengenai YOLOv5, YOLOv8, computer vision, intelligent transportation system, dan implementasi smart city. Menunjukkan gap bahwa penelitian komparatif pada CCTV Kabupaten Kebumen masih terbatas.                                                                                                                                                     | 700–1000    |
+| **Method**       | Menjelaskan metode eksperimen, dataset tiga video CCTV, dua model (YOLOv8 dan YOLOv5), spesifikasi perangkat, variabel penelitian, prosedur eksperimen sebanyak 18 run, metrik preprocess, inference, postprocess, total pipeline, serta teknik analisis deskriptif.                                                                                                                | 800–1200    |
+| **Results**      | Menampilkan tabel hasil rata-rata, standar deviasi, grafik perbandingan preprocess, inference, postprocess, dan total pipeline antara YOLOv8 dan YOLOv5 tanpa interpretasi.                                                                                                                                                                                                         | 500–800     |
+| **Discussion**   | Menginterpretasikan hasil bahwa YOLOv8 memiliki inference lebih cepat daripada YOLOv5 sehingga lebih sesuai digunakan pada sistem monitoring lalu lintas berbasis CCTV. Membahas penyebab perbedaan performa dan membandingkan dengan penelitian terdahulu.                                                                                                                         | 600–900     |
+| **Conclusion**   | Menjawab Research Question, menyimpulkan bahwa YOLOv8 lebih efisien dibandingkan YOLOv5 berdasarkan waktu inferensi dan total pipeline, serta memberikan saran penelitian lanjutan menggunakan GPU dan dataset yang lebih besar.                                                                                                                                                    | 200–400     |
 
 ---
 
@@ -130,24 +129,24 @@ Buat outline paper untuk riset Anda menggunakan struktur IMRAD.
 
 Buat consistency matrix untuk memverifikasi internal consistency paper Anda.
 
-|  | Intro | Method | Result | Discussion | Conclusion |
-|--|-------|--------|--------|-----------|-----------|
-| *Contoh: RQ1* | *✓* | *✓* | *✓* | *✓* | *✓* |
-| *Contoh: Metrik-X* | *✗ ←* | *✗ ←* | *✓* | *✗ ←* | *✗ ←* |
-| RQ1 | | | | | |
-| RQ2 | | | | | |
-| Metrik utama | | | | | |
-| Variabel IV | | | | | |
-| Variabel DV | | | | | |
-| Klaim/kontribusi | | | | | |
+| Komponen                                               | Intro | Method | Result | Discussion | Conclusion |
+| ------------------------------------------------------ | :---: | :----: | :----: | :--------: | :--------: |
+| Research Question                                      |   ✓   |    ✓   |    ✓   |      ✓     |      ✓     |
+| Hipotesis                                              |   ✓   |    ✓   |    ✓   |      ✓     |      ✓     |
+| Variabel Independen (Model YOLO)                       |   ✓   |    ✓   |    ✓   |      ✓     |      ✓     |
+| Variabel Dependen (Preprocess, Inference, Postprocess) |   ✓   |    ✓   |    ✓   |      ✓     |      ✓     |
+| Dataset CCTV                                           |   ✓   |    ✓   |    ✓   |      ✓     |      ✓     |
+| Grafik Perbandingan                                    |   ✗   |    ✓   |    ✓   |      ✓     |      ✓     |
+| Kontribusi Penelitian                                  |   ✓   |    ✗   |    ✓   |      ✓     |      ✓     |
+
 
 **Isi setiap sel:** ✓ (ada & konsisten), ✗ (missing), ~ (ada tapi inkonsisten)
 
-**Inkonsistensi yang ditemukan:**
-> ___________________________________________________
+**Inkonsistensi yang ditemukan**
+> Tidak terdapat inkonsistensi yang signifikan. Semua Research Question, variabel penelitian, metode, dan hasil telah konsisten dari pendahuluan hingga kesimpulan.
 
-**Tindakan perbaikan:**
-> ___________________________________________________
+**Tindakan Perbaikan**
+>Menambahkan referensi terhadap grafik hasil pada bagian Discussion agar interpretasi lebih kuat serta memastikan seluruh gambar dan tabel diberi nomor dan penjelasan.
 
 ---
 
@@ -156,22 +155,21 @@ Buat consistency matrix untuk memverifikasi internal consistency paper Anda.
 Ambil satu paragraf dari tulisan Anda (atau tulis paragraf baru) dan evaluasi kualitasnya.
 
 **Paragraf asli:**
-> (tempel paragraf Anda di sini)
+> Penelitian ini membandingkan YOLOv8 dan YOLOv5 untuk mendeteksi kendaraan pada CCTV Kabupaten Kebumen. Pengujian dilakukan menggunakan tiga video CCTV dan hasilnya menunjukkan bahwa YOLOv8 lebih cepat daripada YOLOv5.
 
-| Kriteria | Evaluasi | Perbaikan |
-|----------|---------|-----------|
-| Clarity | *Contoh: kalimat ke-3 ambigu — "performa" bisa berarti accuracy atau speed* | *Ubah menjadi: "accuracy meningkat..."* |
-| Precision | | |
-| Conciseness | | |
+| Kriteria    | Evaluasi                                                               | Perbaikan                                         |
+| ----------- | ---------------------------------------------------------------------- | ------------------------------------------------- |
+| Clarity     | Sudah jelas tetapi belum menjelaskan bagaimana perbandingan dilakukan. | Tambahkan jumlah video dan jumlah run eksperimen. |
+| Precision   | Belum menyebutkan metrik yang digunakan.                               | Sebutkan preprocess, inference, dan postprocess.  |
+| Conciseness | Sudah cukup ringkas.                                                   | Tidak perlu perubahan besar.                      |
 
 **Paragraf setelah perbaikan:**
-> (tulis paragraf yang sudah diperbaiki)
-
+> Penelitian ini membandingkan performa YOLOv8 dan YOLOv5 dalam mendeteksi kendaraan pada tiga rekaman CCTV di Kabupaten Kebumen. Pengujian dilakukan sebanyak tiga kali pada setiap video untuk masing-masing model sehingga diperoleh 18 run eksperimen. Evaluasi dilakukan berdasarkan waktu preprocess, inference, postprocess, dan total pipeline. Hasil eksperimen menunjukkan bahwa YOLOv8 memiliki rata-rata waktu inference dan total pipeline yang lebih rendah dibandingkan YOLOv5 sehingga lebih sesuai untuk implementasi sistem pemantauan lalu lintas berbasis smart mobility.
 ---
 
 ## Refleksi
 
 > Apa perbedaan antara menulis "tentang" riset dan menulis sebagai "argumen" riset? Bagaimana urutan penulisan (Method → Discussion → Introduction) mengubah kualitas tulisan?
 
-> ___________________________________________________
-> ___________________________________________________
+> Menulis "tentang" riset hanya menjelaskan apa yang dilakukan, sedangkan menulis sebagai "argumen" riset berarti setiap bagian tulisan harus mendukung jawaban terhadap Research Question. Pendekatan ini membuat alur penelitian menjadi lebih logis karena setiap metode, hasil, dan pembahasan saling berkaitan untuk memperkuat kesimpulan.
+> Menulis dengan urutan Method → Results → Discussion → Introduction → Conclusion membantu menghasilkan tulisan yang lebih konsisten karena seluruh bagian pendahuluan dan kesimpulan disusun berdasarkan hasil eksperimen yang benar-benar diperoleh, sehingga mengurangi inkonsistensi antara tujuan penelitian dan hasil yang dilaporkan.
