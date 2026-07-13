@@ -61,56 +61,56 @@ Data leakage terjadi ketika informasi dari test set "bocor" ke preprocessing:
 
 ---
 
-## Template A.13 — Preprocessing Documentation Log
+## A.13 — Preprocessing Documentation Log
 
-```
 PREPROCESSING LOG
 
-Dataset           : ____________________
-Jumlah data awal  : ____________________
+Dataset           : Rekaman CCTV kendaraan Kabupaten Kebumen
+Jumlah data awal  : 3 video CCTV
 
 Cleaning:
-| Masalah | Jumlah Kasus | Penanganan | Justifikasi |
-|---------|-------------|------------|-------------|
-| Missing |             |            |             |
-| Duplikat|             |            |             |
-| Error   |             |            |             |
+| Masalah      | Jumlah Kasus | Penanganan                                    | Justifikasi                                |
+| ------------ | -----------: | --------------------------------------------- | ------------------------------------------ |
+| Missing data |            0 | Tidak ada tindakan                            | Seluruh video dapat diproses               |
+| Duplikat     |            0 | Tidak ada tindakan                            | Setiap video merupakan lokasi yang berbeda |
+| Error format |            0 | Seluruh video diseragamkan menjadi format MP4 | Menjaga konsistensi proses deteksi         |
+
 
 Transformation:
-| Transformasi | Variabel | Detail | Alasan |
-|-------------|----------|--------|--------|
-|             |          |        |        |
+| Transformasi         | Variabel      | Detail           | Alasan                                           |
+| -------------------- | ------------- | ---------------- | ------------------------------------------------ |
+| Resize frame         | Image Size    | 640 × 640 piksel | Menyamakan ukuran input pada kedua model         |
+| Confidence Threshold | Deteksi objek | 0,25             | Menyamakan parameter pengujian YOLOv8 dan YOLOv5 |
+
 
 Normalization:
-  Metode    : ____________________
-  Alasan    : ____________________
-  Parameter : (dihitung dari: training set / seluruh data)
+Metode    : Tidak dilakukan
+Alasan    : Penelitian menggunakan model YOLO pretrained untuk inferensi sehingga tidak memerlukan normalisasi tambahan pada data hasil pengujian.
+Parameter : Tidak ada
 
 Leakage Check:
-  [ ] Parameter normalisasi dari training set saja
-  [ ] Tidak ada informasi test set dalam preprocessing
-  [ ] Cross-validation dilakukan setelah split
+  [x] Tidak ada data training dan testing
+  [x] Tidak ada informasi yang bocor antar pengujian
+  [x] Seluruh eksperimen menggunakan konfigurasi yang sama
 
-Jumlah data akhir : ____________________
-Script tersedia   : [ ] Ya → path: ____ | [ ] Belum
-```
+Jumlah data akhir : 3 video CCTV
+Script tersedia   : [x] Ya → YOLOv8 dan YOLOv5 Python Script
+
 
 ---
 
 ## Latihan 1 — Cleaning Plan
 
-Periksa dataset Anda (atau dataset contoh) dan dokumentasikan masalah yang ditemukan.
+| Masalah      | Jumlah Kasus | Penanganan                              | Justifikasi                              |
+| ------------ | -----------: | --------------------------------------- | ---------------------------------------- |
+| Missing data |            0 | Tidak ada                               | Seluruh video dapat diproses             |
+| Duplikat     |            0 | Tidak ada                               | Setiap video berasal dari lokasi berbeda |
+| Error format |            0 | Format MP4 digunakan pada seluruh video | Konsisten untuk seluruh eksperimen       |
 
-| Masalah | Jumlah Kasus | Penanganan | Justifikasi |
-|---------|-------------|------------|-------------|
-| *Contoh: Missing di kolom "label"* | *12 dari 500 (2.4%)* | *Listwise deletion* | *< 5%, distribusi random (MCAR)* |
-| | | | |
-| | | | |
-| | | | |
 
-**Jumlah data sebelum cleaning:** ____
-**Jumlah data setelah cleaning:** ____
-**Persentase data yang hilang/berubah:** ____%
+**Jumlah data sebelum cleaning:** 3 video
+**Jumlah data setelah cleaning:** 3 video
+**Persentase data yang hilang/berubah:** 0%
 
 ---
 
@@ -118,19 +118,19 @@ Periksa dataset Anda (atau dataset contoh) dan dokumentasikan masalah yang ditem
 
 Tentukan apakah data Anda perlu normalisasi, dan jika ya, metode apa yang tepat.
 
-| Variabel | Range Asli | Distribusi | Outlier? | Metode Normalisasi | Alasan |
-|----------|-----------|-----------|----------|-------------------|--------|
-| *Contoh: response_time* | *0.1 – 45.2s* | *Right-skewed* | *Ya (45.2s)* | *Robust scaling* | *Ada outlier, perlu robust* || *Contoh: accuracy_score* | *0.72 – 0.95* | *Normal, narrow* | *Tidak* | *Tidak perlu* | *Sudah dalam [0,1], metode berbasis distance tidak digunakan* || | | | | | |
-| | | | | | |
+| Variabel         | Range Asli    | Distribusi | Outlier | Metode          | Alasan                             |
+| ---------------- | ------------- | ---------- | ------- | --------------- | ---------------------------------- |
+| Preprocess Time  | 0,8–4,6 ms    | Normal     | Tidak   | Tidak dilakukan | Digunakan sebagai hasil pengukuran |
+| Inference Time   | 77,1–313,6 ms | Normal     | Tidak   | Tidak dilakukan | Digunakan langsung untuk analisis  |
+| Postprocess Time | 1,0–1,9 ms    | Normal     | Tidak   | Tidak dilakukan | Tidak memerlukan normalisasi       |
 
-**Apakah normalisasi diperlukan?** [ ] Ya / [ ] Tidak
+**Apakah normalisasi diperlukan?** [ ] Ya / [x] Tidak
 **Justifikasi:**
-> ___________________________________________________
+> Penelitian ini membandingkan performa YOLOv8 dan YOLOv5 berdasarkan waktu preprocess, inference, dan postprocess. Nilai yang diperoleh merupakan hasil pengukuran langsung dari proses inferensi sehingga tidak memerlukan normalisasi tambahan. Analisis dilakukan menggunakan nilai asli agar perbandingan performa kedua model tetap merepresentasikan kondisi sebenarnya.
 
 **Leakage check:**
-- [ ] Parameter dihitung dari training set saja
-- [ ] Normalisasi diterapkan setelah train-test split
-
+- [✓]Tidak terdapat proses training dan testing.
+- [✓]Tidak dilakukan normalisasi sehingga tidak terjadi data leakage.
 ---
 
 ## Latihan 3 — Preprocessing Report
@@ -140,16 +140,32 @@ Buat ringkasan preprocessing lengkap — dokumentasi yang cukup bagi orang lain 
 ```
 PREPROCESSING SUMMARY
 
-1. Dataset: ____________________
-2. Data awal: ____ records, ____ features
+1. Dataset:
+   Rekaman CCTV kendaraan Kabupaten Kebumen
+   (depan_dprd.mp4, depan_pendopo.mp4, merdeka_timur.mp4)
+
+2. Data awal:
+   3 video CCTV
+
 3. Cleaning:
-   - Missing values: ____ kasus, metode: ____
-   - Duplikat: ____ kasus, tindakan: ____
-   - Error: ____ kasus, tindakan: ____
-4. Transformation: ____________________
-5. Normalisasi: ____ (metode), parameter dari ____
-6. Data akhir: ____ records, ____ features
-7. Leakage check: [ ] Lulus / [ ] Ada masalah
+   - Missing values : 0 kasus
+   - Duplikat       : 0 kasus
+   - Error format   : 0 kasus
+
+4. Transformation:
+   - Seluruh video diproses menggunakan image size 640 × 640 piksel
+   - Confidence threshold ditetapkan sebesar 0,25
+   - Device yang digunakan adalah CPU
+
+5. Normalisasi:
+   Tidak dilakukan karena penelitian hanya membandingkan performa inferensi kedua model menggunakan data hasil pengukuran asli.
+
+6. Data akhir:
+   3 video CCTV yang menghasilkan total 18 run pengujian.
+
+7. Leakage check:
+   ☑ Lulus
+
 ```
 
 ---
@@ -158,5 +174,4 @@ PREPROCESSING SUMMARY
 
 > Apakah Anda pernah melakukan normalisasi "karena biasa dilakukan" tanpa mempertimbangkan apakah benar-benar diperlukan? Apa risiko over-preprocessing?
 
-> ___________________________________________________
-> ___________________________________________________
+> Pada penelitian ini, normalisasi tidak dilakukan hanya karena merupakan langkah yang umum digunakan. Keputusan preprocessing disesuaikan dengan tujuan penelitian, yaitu membandingkan waktu preprocess, inference, dan postprocess antara YOLOv8 dan YOLOv5. Melakukan normalisasi tanpa kebutuhan yang jelas dapat mengubah karakteristik data asli sehingga hasil analisis menjadi kurang merepresentasikan performa sebenarnya. Oleh karena itu, preprocessing dilakukan seminimal mungkin dengan tetap menjaga konsistensi dan reproduktibilitas eksperimen.
