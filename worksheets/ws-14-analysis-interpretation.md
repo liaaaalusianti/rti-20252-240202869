@@ -74,39 +74,65 @@ Hipotesis yang ditolak adalah **temuan yang berharga**:
 
 ## Template A.14 — Analysis & Interpretation Report
 
-```
 ANALYSIS & INTERPRETATION
 
-1. Statistik Deskriptif:
-   | Skenario | Mean | Std | Median | Min | Max | n |
-   |----------|------|-----|--------|-----|-----|---|
-   |          |      |     |        |     |     |   |
+1. Statistik Deskriptif
 
-2. Uji Hipotesis:
-   Uji yang digunakan  : ____________________
-   Justifikasi          : ____________________
-   Hasil: p = ____, effect size (d/r/η²) = ____
-   CI 95%               : [____, ____]
+| Model  | Mean Inference (ms) | Std (ms) | Median (ms) | Min (ms) | Max (ms) | n |
+|--------|--------------------:|---------:|------------:|---------:|---------:|--:|
+| YOLOv8 | 106,07 | 30,73 | 101,20 | 77,10 | 157,80 | 9 |
+| YOLOv5 | 219,84 | 35,07 | 208,20 | 202,00 | 313,60 | 9 |
 
-3. Keputusan:
-   [ ] H₀ ditolak → H₁ diterima
-   [ ] H₀ tidak ditolak
+2. Uji Hipotesis
 
-4. Interpretasi:
-   Hubungan ke RQ       : ____________________
-   Practical significance: ____________________
-   Perbandingan literatur: ____________________
+Uji yang digunakan : Belum dilakukan (analisis deskriptif)
 
-5. Limitation:
-   | Jenis | Ancaman | Dampak | Mitigasi |
-   |-------|---------|--------|----------|
-   |       |         |        |          |
+Justifikasi :
+Penelitian ini berfokus pada analisis deskriptif terhadap waktu preprocess, inference, dan postprocess menggunakan rata-rata dan standar deviasi. Pengujian inferensial belum dilakukan karena penelitian bertujuan membandingkan performa kedua model berdasarkan hasil eksperimen.
 
-6. Failure Analysis (jika H₀ tidak ditolak):
-   Penyebab potensial  : ____________________
-   Boundary condition   : ____________________
-   Insight              : ____________________
-```
+Hasil :
+p-value : Belum dihitung
+Effect size : Belum dihitung
+Confidence Interval : Belum dihitung
+
+3. Keputusan
+
+☑ YOLOv8 memiliki rata-rata waktu inference lebih rendah dibandingkan YOLOv5.
+
+4. Interpretasi
+
+Hubungan ke Research Question :
+Berdasarkan hasil eksperimen, YOLOv8 menunjukkan performa inferensi yang lebih cepat dibandingkan YOLOv5 pada ketiga video CCTV Kabupaten Kebumen.
+
+Practical significance :
+Kecepatan inferensi yang lebih rendah membuat YOLOv8 lebih sesuai diterapkan pada sistem pemantauan lalu lintas secara real-time.
+
+Perbandingan literatur :
+Hasil penelitian sejalan dengan beberapa penelitian terdahulu yang melaporkan bahwa YOLOv8 memiliki efisiensi inferensi yang lebih baik dibandingkan YOLOv5 pada tugas deteksi objek.
+
+5. Limitation
+
+| Jenis | Ancaman | Dampak | Mitigasi |
+|-------|----------|---------|----------|
+| Internal Validity | Dataset hanya terdiri dari tiga video CCTV | Hasil mungkin belum mewakili seluruh kondisi lalu lintas | Menambah jumlah video pada penelitian berikutnya |
+| External Validity | Pengujian hanya menggunakan CPU | Hasil dapat berbeda jika menggunakan GPU | Pengujian ulang pada perangkat berbeda |
+| Statistical | Jumlah eksperimen hanya 18 run | Analisis statistik inferensial belum dilakukan | Menambah jumlah run pada penelitian selanjutnya |
+
+6. Failure Analysis
+
+Selama pengujian ditemukan beberapa false positive, yaitu objek statis seperti batu terdeteksi sebagai kendaraan. Selain itu, YOLOv5 memiliki waktu inferensi yang relatif lebih lama dibandingkan YOLOv8.
+
+Penyebab potensial :
+- Kemiripan bentuk objek dengan kendaraan.
+- Sudut pengambilan CCTV.
+- Kondisi pencahayaan dan kualitas video.
+
+Boundary condition :
+Model masih dapat mengalami kesalahan ketika objek memiliki bentuk menyerupai kendaraan atau ketika kualitas rekaman CCTV menurun.
+
+Insight :
+Walaupun masih ditemukan false positive, YOLOv8 tetap memberikan waktu inferensi yang lebih cepat sehingga lebih sesuai digunakan untuk sistem pemantauan lalu lintas berbasis CCTV.
+
 
 ---
 
@@ -114,37 +140,27 @@ ANALYSIS & INTERPRETATION
 
 Tentukan uji statistik yang tepat untuk eksperimen Anda.
 
-| Pertanyaan | Jawaban |
-|-----------|---------|
-| Berapa grup yang dibandingkan? | *Contoh: 3 (BERT, LSTM, SVM)* |
-| Apakah data berpasangan (paired)? | |
-| Apakah distribusi normal? (uji normalitas) | |
-| **Uji yang dipilih:** | |
-| **Justifikasi:** | |
+| Pertanyaan                        | Jawaban                                                                                          |
+| --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Berapa grup yang dibandingkan?    | 2 (YOLOv8 dan YOLOv5)                                                                            |
+| Apakah data berpasangan (paired)? | Ya, kedua model diuji pada video dan skenario yang sama                                          |
+| Apakah distribusi normal?         | Belum dilakukan uji normalitas                                                                   |
+| **Uji yang dipilih**              | Paired t-test (jika data normal) atau Wilcoxon Signed-Rank Test (jika data tidak normal)         |
+| **Justifikasi**                   | Kedua model diuji menggunakan dataset dan skenario yang sama sehingga data bersifat berpasangan. |
 
-**Effect size yang akan dilaporkan:** [ ] Cohen's d / [ ] Eta-squared / [ ] Lainnya: ____
+**Effect size yang akan dilaporkan:** [✓] Cohen's d / [ ] Eta-squared / [ ] Lainnya: ____
 
 ---
 
 ## Latihan 2 — Interpretasi Hasil
 
-Gunakan data berikut (atau data riil Anda) untuk berlatih interpretasi.
-
-**Data:**
-| Model | Accuracy (mean ± std) | n |
-|-------|----------------------|---|
-| A | 89.2 ± 1.5 | 10 |
-| B | 87.8 ± 2.1 | 10 |
-
-p = 0.045, Cohen's d = 0.74, CI 95% = [0.03, 2.77]
-
-| Aspek | Interpretasi |
-|-------|-------------|
-| Signifikansi statistik | *Contoh: p < 0.05 → signifikan pada α=0.05* |
-| Effect size | *Contoh: d=0.74 → medium-to-large effect* |
-| Practical significance | |
-| Hubungan ke RQ | |
-| Perbandingan literatur | |
+| Aspek                         | Interpretasi                                                                                                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Signifikansi statistik        | Belum dihitung karena penelitian masih menggunakan analisis deskriptif.                                                                                                   |
+| Effect size                   | Belum dihitung.                                                                                                                                                           |
+| Practical significance        | YOLOv8 memiliki waktu inferensi lebih rendah sehingga lebih efisien untuk aplikasi pemantauan lalu lintas secara real-time.                                               |
+| Hubungan ke Research Question | Hasil menunjukkan bahwa YOLOv8 memiliki performa inferensi lebih cepat dibandingkan YOLOv5 pada rekaman CCTV Kabupaten Kebumen.                                           |
+| Perbandingan literatur        | Temuan ini konsisten dengan penelitian sebelumnya yang menyatakan bahwa YOLOv8 memiliki efisiensi inferensi yang lebih baik dibandingkan YOLOv5 pada tugas deteksi objek. |
 
 ---
 
@@ -152,22 +168,22 @@ p = 0.045, Cohen's d = 0.74, CI 95% = [0.03, 2.77]
 
 Latih kemampuan failure analysis: hipotesis TIDAK didukung. Apa yang bisa dipelajari?
 
-**Skenario:** Metode baru Anda mendapat F1 = 83.2%, baseline = 84.7%. p = 0.12 (tidak signifikan).
+| Pertanyaan                        | Jawaban                                                                                                                                   |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Apakah ini gagal?                 | Tidak. Kedua model berhasil mendeteksi kendaraan, meskipun masih ditemukan beberapa kesalahan deteksi.                                    |
+| Kemungkinan penyebab?             | False positive terjadi karena objek statis memiliki bentuk yang menyerupai kendaraan dan dipengaruhi oleh kualitas video CCTV.            |
+| Boundary condition?               | Model dapat mengalami penurunan performa pada kondisi pencahayaan rendah atau ketika terdapat objek dengan bentuk yang mirip kendaraan.   |
+| Insight yang bisa diambil?        | YOLOv8 tetap menjadi model yang lebih efisien dari sisi waktu inferensi meskipun masih memiliki beberapa false positive.                  |
+| Apakah layak dilaporkan? Mengapa? | Ya. False positive merupakan bagian dari evaluasi performa model dan menjadi informasi penting untuk pengembangan penelitian selanjutnya. |
 
-| Pertanyaan | Jawaban |
-|-----------|---------|
-| Apakah ini "gagal"? | *Contoh: Bukan gagal total — hipotesis tidak terdukung adalah temuan yang valid dan bisa menjadi kontribusi.* |
-| Kemungkinan penyebab? | *Contoh: Metode baru menambah kompleksitas komputasi (+40% waktu) tanpa peningkatan F1 yang cukup — overhead tidak sebanding.* |
-| Boundary condition? | *Contoh: Metode ini hanya efektif ketika data ≥ 10.000 record; di dataset kecil (<1.000), baseline lebih stabil.* |
-| Insight yang bisa diambil? | *Contoh: Ada trade-off ukuran data vs kompleksitas — rekomendasikan hybrid approach yang adaptif berdasarkan ukuran dataset.* |
-| Apakah layak dilaporkan? Mengapa? | *Contoh: Ya — negative result + boundary condition analysis adalah kontribusi riset yang diakui komunitas (ex: ACL, SIGIR). Mencegah riset duplikasi yang berulang.* |
 
 **Limitation terkait:**
-| Jenis | Ancaman | Dampak |
-|-------|---------|--------|
-| *Contoh: Statistical* | *Contoh: Hanya 5 run per skenario* | *Power test rendah* |
-| | | |
-| | | |
+| Jenis             | Ancaman                  | Dampak                                 |
+| ----------------- | ------------------------ | -------------------------------------- |
+| Internal Validity | Jumlah video hanya tiga  | Generalisasi hasil masih terbatas      |
+| Statistical       | Jumlah run sebanyak 18   | Analisis inferensial belum dilakukan   |
+| External Validity | Pengujian hanya pada CPU | Hasil dapat berbeda pada perangkat GPU |
+
 
 ---
 
@@ -175,5 +191,4 @@ Latih kemampuan failure analysis: hipotesis TIDAK didukung. Apa yang bisa dipela
 
 > Apakah "failure" dalam riset benar-benar gagal, atau justru kontribusi? Bagaimana failure analysis mengubah cara Anda melihat hasil negatif?
 
-> ___________________________________________________
-> ___________________________________________________
+> Penelitian yang tidak sepenuhnya sesuai dengan hipotesis bukan berarti gagal. Hasil negatif maupun kesalahan deteksi tetap memberikan informasi penting mengenai batas kemampuan model pada kondisi tertentu. Melalui failure analysis, peneliti dapat mengetahui penyebab terjadinya kesalahan, mengidentifikasi kondisi yang memengaruhi performa model, serta memberikan rekomendasi untuk penelitian selanjutnya agar hasil yang diperoleh semakin baik.
